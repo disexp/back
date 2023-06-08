@@ -28,4 +28,12 @@ public class TypeUserController {
     public ResponseEntity<List<TypeUser>> getAllTypeUsers() {
         return new ResponseEntity<List<TypeUser>>(typeUserRepository.findAll(), HttpStatus.OK);
     }
+
+    //URL: http://localhost:8080/api/TuCine/v1/typeUsers
+    //Method: POST
+    @Transactional
+    @PostMapping("/typeUsers")
+    public ResponseEntity<TypeUser> createTypeUser(@RequestBody TypeUser typeUser){
+        return new ResponseEntity<TypeUser>(typeUserRepository.save(typeUser), HttpStatus.CREATED);
+    }
 }
