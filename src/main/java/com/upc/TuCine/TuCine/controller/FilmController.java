@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +26,14 @@ public class FilmController {
     @GetMapping("/films")
     public ResponseEntity<List<Film>> getAllFilms() {
         return new ResponseEntity<List<Film>>(filmRepository.findAll(), HttpStatus.OK);
+    }
+
+    //URL: http://localhost:8080/api/TuCine/v1/films
+    //Method: POST
+    @Transactional
+    @PostMapping("/films")
+    public ResponseEntity<Film> createFilm(@RequestBody Film film){
+        return new ResponseEntity<Film>(filmRepository.save(film), HttpStatus.CREATED);
     }
 
 }
