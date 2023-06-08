@@ -27,4 +27,11 @@ public class GenderController {
         return new ResponseEntity<List<Gender>>(genderRepository.findAll(), HttpStatus.OK);
     }
 
+    //URL: http://localhost:8080/api/library/v1/genders
+    //Method: POST
+    @Transactional
+    @PostMapping("/genders")
+    public ResponseEntity<Gender> createGender(@RequestBody Gender gender){
+        return new ResponseEntity<Gender>(genderRepository.save(gender), HttpStatus.CREATED);
+    }
 }
