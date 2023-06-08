@@ -31,6 +31,16 @@ public class CategoryController {
         return new ResponseEntity<List<Category>>(categoryRepository.findAll(), HttpStatus.OK);
     }
 
-    
+    //URL: http://localhost:8080/api/TuCine/v1/categories
+    //Method: POST
+    @Transactional
+    @PostMapping("/categories")
+    public ResponseEntity<Category> createCategory(@RequestBody Category category){
+        return new ResponseEntity<Category>(categoryRepository.save(category), HttpStatus.CREATED);
+    }
+
+
+
+
 
 }
