@@ -19,5 +19,12 @@ public class GenderController {
         this.genderRepository = genderRepository;
     }
 
+    //URL: http://localhost:8080/api/TuCine/v1/genders
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/genders")
+    public ResponseEntity<List<Gender>> getAllGenders() {
+        return new ResponseEntity<List<Gender>>(genderRepository.findAll(), HttpStatus.OK);
+    }
 
 }
