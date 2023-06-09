@@ -39,6 +39,12 @@ public class ContentRatingController {
         return new ResponseEntity<ContentRating>(contentRatingRepository.findById(id).get(), HttpStatus.OK);
     }
 
-
+    //URL: http://localhost:8080/api/TuCine/v1/contentRatings
+    //Method: POST
+    @Transactional
+    @PostMapping("/contentRatings")
+    public ResponseEntity<ContentRating> createContentRating(@RequestBody ContentRating contentRating){
+        return new ResponseEntity<ContentRating>(contentRatingRepository.save(contentRating), HttpStatus.CREATED);
+    }
 
 }
