@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/TuCine/v1")
 public class CustomerController {
@@ -16,6 +18,14 @@ public class CustomerController {
 
     public CustomerController(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+    }
+
+    //URL: http://localhost:8080/api/TuCine/v1/customers
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/customers")
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        return new ResponseEntity<List<Customer>>(customerRepository.findAll(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/customers
