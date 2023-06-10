@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,8 @@ public class Category {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories")
     private List<Film> films;
 }

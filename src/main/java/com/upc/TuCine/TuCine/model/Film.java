@@ -45,6 +45,7 @@ public class Film {
     @ManyToMany
     private List<Actor> actors;
 
+    @JsonIgnore
     @ManyToMany
     private List<Category> categories;
 }
