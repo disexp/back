@@ -1,7 +1,10 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.exception.ResourceNotFoundException;
+import com.upc.TuCine.TuCine.model.Actor;
 import com.upc.TuCine.TuCine.model.Category;
 import com.upc.TuCine.TuCine.model.Film;
+import com.upc.TuCine.TuCine.repository.ActorRepository;
 import com.upc.TuCine.TuCine.repository.CategoryRepository;
 import com.upc.TuCine.TuCine.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +22,11 @@ public class FilmController {
     private FilmRepository filmRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-    public FilmController(FilmRepository filmRepository, CategoryRepository categoryRepository) {
+    private ActorRepository actorRepository;
+    public FilmController(FilmRepository filmRepository,ActorRepository actorRepository, CategoryRepository categoryRepository) {
         this.filmRepository = filmRepository;
         this.categoryRepository = categoryRepository;
+        this.actorRepository = actorRepository;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/films
@@ -56,4 +61,15 @@ public class FilmController {
         return ResponseEntity.ok().build();
     }
 
+    //URL: http://localhost:8080/api/TuCine/v1/films/{idFilm}/actors/{idActor}
+    //Method: POST
+    @Transactional
+    @PostMapping("/films/{idFilm}/actors/{idActor}")
+    public void addActorToFilm(@PathVariable(value = "idFilm") Integer idFilm, @PathVariable(value = "idActor") Integer idActor){
+        Film film = filmRepository.findById(idFilm).orElseThrow(()-> new ResourceNotFoundException("No se encuentra la película con id: " + idFilm));
+        Actor actor = actorRepository.findById(idActor).orElseThrow(()-> new ResourceNotFoundException("No se encuentra el actor con id: " + idActor));
+
+        film.getActors().add(actor);
+        filmRepository.save(film);
+    }
 }
