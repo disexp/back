@@ -21,6 +21,14 @@ public class ActorController {
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/actors
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/actors")
+    public ResponseEntity<List<Actor>> getAllActors() {
+        return new ResponseEntity<List<Actor>>(actorRepository.findAll(), HttpStatus.OK);
+    }
+
+    //URL: http://localhost:8080/api/TuCine/v1/actors
     //Method: POST
     @Transactional
     @PostMapping("/actors")
