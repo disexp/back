@@ -1,8 +1,10 @@
 package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.model.Category;
+import com.upc.TuCine.TuCine.model.ContentRating;
 import com.upc.TuCine.TuCine.model.Film;
 import com.upc.TuCine.TuCine.repository.CategoryRepository;
+import com.upc.TuCine.TuCine.repository.ContentRatingRepository;
 import com.upc.TuCine.TuCine.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +21,14 @@ public class FilmController {
     private FilmRepository filmRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-    public FilmController(FilmRepository filmRepository, CategoryRepository categoryRepository) {
+
+    @Autowired
+    private ContentRatingRepository contentRatingRepository;
+
+    public FilmController(FilmRepository filmRepository, CategoryRepository categoryRepository, ContentRatingRepository contentRatingRepository) {
         this.filmRepository = filmRepository;
         this.categoryRepository = categoryRepository;
+        this.contentRatingRepository = contentRatingRepository;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/films
@@ -37,8 +44,14 @@ public class FilmController {
     @Transactional
     @PostMapping("/films")
     public ResponseEntity<Film> createFilm(@RequestBody Film film){
-        return new ResponseEntity<Film>(filmRepository.save(film), HttpStatus.CREATED);
+
+        ContentRating contentRating= contentRatingRepository.findById(film.getContentRating().getId()).orElse(null); // Obtener el contentRating por su ID
+        film.setContentRating(contentRating);
+        return new ResponseEntity<>(filmRepository.save(film), HttpStatus.CREATED);
     }
+
+
+    // URL: http://localhost:8080/api/TuCine/v1/films/
 
     // URL: http://localhost:8080/api/TuCine/v1/films/{filmId}/categories/{categoryId}
     // Method: POST

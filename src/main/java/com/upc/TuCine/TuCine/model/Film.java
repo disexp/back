@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,10 +34,13 @@ public class Film {
     @Column(name = "duration", nullable = false)
     private Integer duration;
 
-    @OneToOne
-    @JoinColumn(name = "ContentRating_id", nullable = false, foreignKey = @ForeignKey(name = "FK_CONTENTRATING_ID"))
+
+/*    private Integer contentRatingId;*/
+
+    @ManyToOne
+    @JoinColumn(name = "content_rating", nullable = false, foreignKey = @ForeignKey(name = "FK_FILM_CONTENTRATING"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private ContentRating ContentRating_id;
+    private ContentRating contentRating;
 
     @ManyToMany
     private List<Actor> actors;
