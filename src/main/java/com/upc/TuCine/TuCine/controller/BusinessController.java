@@ -28,4 +28,12 @@ public class BusinessController {
     public ResponseEntity<List<Business>> getAllBusinesses() {
         return new ResponseEntity<List<Business>>(businessRepository.findAll(), HttpStatus.OK);
     }
+
+    //URL: http://localhost:8080/api/TuCine/v1/businesses
+    //Method: POST
+    @Transactional
+    @PostMapping("/businesses")
+    public ResponseEntity<Business> createBusiness(@RequestBody Business business){
+        return new ResponseEntity<Business>(businessRepository.save(business), HttpStatus.CREATED);
+    }
 }
