@@ -46,5 +46,6 @@ public class ContentRatingController {
     public ResponseEntity<ContentRating> createContentRating(@RequestBody ContentRating contentRating){
         return new ResponseEntity<ContentRating>(contentRatingRepository.save(contentRating), HttpStatus.CREATED);
     }
+    
 
 }

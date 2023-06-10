@@ -69,4 +69,17 @@ public class FilmController {
         return ResponseEntity.ok().build();
     }
 
+    //Get content rating by Film Id
+    //URL: http://localhost:8080/api/TuCine/v1/films/{id}/contentRating
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/films/{id}/contentRating")
+    public ResponseEntity<ContentRating> getContentRatingByFilmId(@PathVariable("id") Integer id) {
+        Film film = filmRepository.findById(id).orElse(null); // Obtener el film por su ID
+        if (film == null) {
+            return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el film
+        }
+        return new ResponseEntity<ContentRating>(film.getContentRating(), HttpStatus.OK);
+    }
+
 }
