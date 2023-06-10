@@ -16,9 +16,16 @@ public class OwnerController {
 
     @Autowired
     private OwnerRepository ownerRepository;
-
     public OwnerController(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
+    }
+
+    //URL: http://localhost:8080/api/TuCine/v1/owners
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/owners")
+    public ResponseEntity<List<Owner>> getAllOwners() {
+        return new ResponseEntity<List<Owner>>(ownerRepository.findAll(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/owners
