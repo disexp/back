@@ -21,6 +21,14 @@ public class PersonController {
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/persons
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/persons")
+    public ResponseEntity<List<Person>> getAllPersons() {
+        return new ResponseEntity<List<Person>>(personRepository.findAll(), HttpStatus.OK);
+    }
+
+    //URL: http://localhost:8080/api/TuCine/v1/persons
     //Method: POST
     @Transactional
     @PostMapping("/persons")
