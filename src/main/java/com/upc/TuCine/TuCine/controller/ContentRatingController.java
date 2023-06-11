@@ -1,6 +1,7 @@
 package com.upc.TuCine.TuCine.controller;
 
 
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.ContentRating;
 import com.upc.TuCine.TuCine.repository.ContentRatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,16 +52,16 @@ public class ContentRatingController {
 
     void validateContentRating(ContentRating contentRating) {
         if (contentRating.getName() == null || contentRating.getName().isEmpty()) {
-            throw new RuntimeException("El nombre de la clasificacion es requerido");
+            throw new ValidationException("El nombre de la clasificacion es requerido");
         }
         if(contentRating.getDescription() == null || contentRating.getDescription().isEmpty()){
-            throw new RuntimeException("La descripcion de la clasificacion es requerida");
+            throw new ValidationException("La descripcion de la clasificacion es requerida");
         }
     }
 
     void existsContentRatingByName(String name) {
         if (contentRatingRepository.existsContentRatingByName(name)) {
-            throw new RuntimeException("No se puede registrar la clasificación, ya existe uno con ese nombre");
+            throw new ValidationException("No se puede registrar la clasificación, ya existe uno con ese nombre");
         }
     }
     

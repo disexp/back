@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.TypeUser;
 import com.upc.TuCine.TuCine.repository.TypeUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,20 @@ public class TypeUserController {
     @Transactional
     @PostMapping("/typeUsers")
     public ResponseEntity<TypeUser> createTypeUser(@RequestBody TypeUser typeUser){
+        validateTypeUser(typeUser);
+        existsTypeUserByName(typeUser.getName());
         return new ResponseEntity<TypeUser>(typeUserRepository.save(typeUser), HttpStatus.CREATED);
+    }
+
+    void validateTypeUser(TypeUser typeUser) {
+        if (typeUser.getName() == null || typeUser.getName().isEmpty()) {
+            throw new ValidationException("El nombre del tipo de usuario no puede estar vacío");
+        }
+    }
+
+    void existsTypeUserByName(String name) {
+        if (typeUserRepository.existsTypeUserByName(name)) {
+            throw new ValidationException("El tipo de usuario ya existe con este nombre");
+        }
     }
 }

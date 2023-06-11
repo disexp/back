@@ -38,9 +38,9 @@ public class Film {
 /*    private Integer contentRatingId;*/
 
     @ManyToOne
-    @JoinColumn(name = "content_rating", nullable = false, foreignKey = @ForeignKey(name = "FK_FILM_CONTENTRATING"))
+    @JoinColumn(name = "content_rating_id", nullable = false, foreignKey = @ForeignKey(name = "FK_FILM_CONTENTRATING"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private ContentRating contentRating;
+    private ContentRating contentRating_id;
 
     @JsonIgnore
     @ManyToMany

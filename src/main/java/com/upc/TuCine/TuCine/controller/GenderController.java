@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Gender;
 import com.upc.TuCine.TuCine.repository.GenderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,25 @@ public class GenderController {
         return new ResponseEntity<List<Gender>>(genderRepository.findAll(), HttpStatus.OK);
     }
 
-    //URL: http://localhost:8080/api/library/v1/genders
+    //URL: http://localhost:8080/api/TuCine/v1/genders
     //Method: POST
     @Transactional
     @PostMapping("/genders")
     public ResponseEntity<Gender> createGender(@RequestBody Gender gender){
+        genderValidate(gender);
+        existsGenderByName(gender.getName());
         return new ResponseEntity<Gender>(genderRepository.save(gender), HttpStatus.CREATED);
+    }
+
+    void genderValidate(Gender gender){
+        if(gender.getName()==null || gender.getName().isEmpty()){
+            throw new ValidationException("El nombre es obligatorio");
+        }
+    }
+
+    void existsGenderByName(String name) {
+        if (genderRepository.existsGenderByName(name)) {
+            throw new ValidationException("No se puede registrar el genero, ya existe uno con ese nombre");
+        }
     }
 }

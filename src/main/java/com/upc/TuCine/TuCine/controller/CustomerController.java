@@ -1,7 +1,9 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Customer;
 import com.upc.TuCine.TuCine.repository.CustomerRepository;
+import com.upc.TuCine.TuCine.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,12 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private PersonRepository personRepository;
 
-    public CustomerController(CustomerRepository customerRepository) {
+    public CustomerController(CustomerRepository customerRepository, PersonRepository personRepository) {
         this.customerRepository = customerRepository;
+        this.personRepository = personRepository;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/customers
@@ -33,6 +38,15 @@ public class CustomerController {
     @Transactional
     @PostMapping("/customers")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
+        validateCustomer(customer);
         return new ResponseEntity<Customer>(customerRepository.save(customer), HttpStatus.CREATED);
     }
+
+    private void validateCustomer(Customer customer) {
+        if (customer.getPerson_id() == null) {
+            throw new ValidationException("La persona es obligatoria");
+        }
+    }
+
+
 }

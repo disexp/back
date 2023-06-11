@@ -21,9 +21,9 @@ public class Actor {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "first_name", length = 100, nullable = false)
-    private String first_name;
+    private String firstName;
     @Column(name = "last_name", length = 100, nullable = false)
-    private String last_name;
+    private String lastName;
     @Column(name = "biography", length = 1000, nullable = false)
     private String biography;
     @Column(name = "birthday", nullable = false)

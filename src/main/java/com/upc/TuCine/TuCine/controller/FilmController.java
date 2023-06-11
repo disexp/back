@@ -54,8 +54,8 @@ public class FilmController {
 
         validateFilm(film);
         existsFilmByTitle(film.getTitle());
-        ContentRating contentRating= contentRatingRepository.findById(film.getContentRating().getId()).orElse(null); // Obtener el contentRating por su ID
-        film.setContentRating(contentRating);
+        ContentRating contentRating= contentRatingRepository.findById(film.getContentRating_id().getId()).orElse(null); // Obtener el contentRating por su ID
+        film.setContentRating_id(contentRating);
         return new ResponseEntity<>(filmRepository.save(film), HttpStatus.CREATED);
     }
 
@@ -88,7 +88,7 @@ public class FilmController {
         if (film == null) {
             return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el film
         }
-        return new ResponseEntity<ContentRating>(film.getContentRating(), HttpStatus.OK);
+        return new ResponseEntity<ContentRating>(film.getContentRating_id(), HttpStatus.OK);
     }
 
     //Get All Categories By Film ID
@@ -127,10 +127,10 @@ public class FilmController {
         if(film.getDuration() == null || film.getDuration() <= 0) {
             throw new ValidationException("La duración de la película no puede ser menor o igual a 0");
         }
-        if(film.getSynopsis() == null) {
+        if(film.getSynopsis() == null || film.getSynopsis().isEmpty()) {
             throw new ValidationException("La sinopsis de la película no puede estar vacía");
         }
-        if(film.getYear() == null) {
+        if(film.getYear() == null || film.getYear() <= 0) {
             throw new ValidationException("El año de la película no puede estar vacío");
         }
 

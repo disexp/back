@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Actor;
 import com.upc.TuCine.TuCine.repository.ActorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,26 @@ public class ActorController {
     @Transactional
     @PostMapping("/actors")
     public ResponseEntity<Actor> createActor(@RequestBody Actor actor){
+        existActorByFirstName(actor.getFirstName(),actor.getLastName());
+        validateActor(actor);
         return new ResponseEntity<Actor>(actorRepository.save(actor), HttpStatus.CREATED);
+    }
+
+    void validateActor(Actor actor) {
+        if (actor.getFirstName() == null || actor.getFirstName().isEmpty()) {
+            throw new ValidationException("El nombre es obligatorio");
+        }
+        if (actor.getLastName() == null || actor.getLastName().isEmpty()) {
+            throw new ValidationException("El apellido es obligatorio");
+        }
+        if (actor.getBirthday() == null) {
+            throw new ValidationException("La fecha de nacimiento es obligatoria");
+        }
+    }
+
+    void existActorByFirstName(String firstName,String lastName){
+        if (actorRepository.existsByFirstNameAndLastName(firstName,lastName)) {
+            throw new ValidationException("Ya existe un actor con el nombre " + firstName + " " + lastName);
+        }
     }
 }

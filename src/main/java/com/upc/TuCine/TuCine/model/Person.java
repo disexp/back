@@ -22,19 +22,21 @@ public class Person {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
     @Column(name="first_name", length = 80, nullable = false)
-    private String first_name;
+    private String firstName;
     @Column(name="last_name", length = 80, nullable = false)
-    private String last_name;
+    private String lastName;
     @Column(name="birthdate", nullable = false)
     private LocalDate birthdate;
     @Column(name="phone", length = 9, nullable = false)
     private String phone;
+    @Column(name="photo", length = 5000, nullable = true)
+    private String photo;
     @Column(name="email", length = 80, nullable = false)
     private String email;
     @Column(name="password", length = 15, nullable = false)
     private String password;
     @Column(name="number_dni", length = 8, nullable = false)
-    private String number_dni;
+    private String numberDni;
 
     @ManyToOne
     @JoinColumn(name = "Gender_id",nullable = false, foreignKey = @ForeignKey(name = "FK_GENDER_ID"))
