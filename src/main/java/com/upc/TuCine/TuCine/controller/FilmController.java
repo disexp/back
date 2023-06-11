@@ -105,6 +105,20 @@ public class FilmController {
         return new ResponseEntity<List<Category>>(film.getCategories(), HttpStatus.OK);
     }
 
+    //Get All Actors By Film ID
+    //URL: http://localhost:8080/api/TuCine/v1/films/{id}/actors
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/films/{id}/actors")
+    public ResponseEntity<List<Actor>> getAllActorsByFilmId(@PathVariable("id") Integer id) {
+        Film film = filmRepository.findById(id).orElse(null); // Obtener el film por su ID
+        if (film == null) {
+            return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el film
+        }
+        return new ResponseEntity<List<Actor>>(film.getActors(), HttpStatus.OK);
+    }
+
+
     void validateFilm(Film film) {
 
         if(film.getTitle() == null || film.getTitle().isEmpty()) {
