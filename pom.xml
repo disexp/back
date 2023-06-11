@@ -14,7 +14,7 @@
 	<name>TuCine</name>
 	<description>TuCine project for Spring Boot</description>
 	<properties>
-		<java.version>20</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
