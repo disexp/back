@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,6 @@ import java.util.List;
 @Entity
 @Table(name = "Actor")
 public class Actor {
-
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
@@ -24,11 +24,12 @@ public class Actor {
     private String first_name;
     @Column(name = "last_name", length = 100, nullable = false)
     private String last_name;
-    @Column(name = "biography", length = 200, nullable = false)
+    @Column(name = "biography", length = 1000, nullable = false)
     private String biography;
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "actors")
     private List<Film> films;
 }

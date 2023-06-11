@@ -42,6 +42,7 @@ public class Film {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ContentRating contentRating;
 
+    @JsonIgnore
     @ManyToMany
     private List<Actor> actors;
 
