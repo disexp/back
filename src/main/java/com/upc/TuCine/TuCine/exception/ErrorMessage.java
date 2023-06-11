@@ -16,5 +16,4 @@ public class ErrorMessage {
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
-
 }
