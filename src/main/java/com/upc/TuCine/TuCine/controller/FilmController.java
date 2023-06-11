@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Category;
 import com.upc.TuCine.TuCine.model.ContentRating;
 import com.upc.TuCine.TuCine.model.Film;
@@ -45,6 +46,8 @@ public class FilmController {
     @PostMapping("/films")
     public ResponseEntity<Film> createFilm(@RequestBody Film film){
 
+        validateFilm(film);
+        existsFilmByTitle(film.getTitle());
         ContentRating contentRating= contentRatingRepository.findById(film.getContentRating().getId()).orElse(null); // Obtener el contentRating por su ID
         film.setContentRating(contentRating);
         return new ResponseEntity<>(filmRepository.save(film), HttpStatus.CREATED);
@@ -96,5 +99,26 @@ public class FilmController {
         return new ResponseEntity<List<Category>>(film.getCategories(), HttpStatus.OK);
     }
 
+    void validateFilm(Film film) {
+
+        if(film.getTitle() == null || film.getTitle().isEmpty()) {
+            throw new ValidationException("El nombre de la película no puede estar vacío");
+        }
+        if(film.getDuration() == null || film.getDuration() <= 0) {
+            throw new ValidationException("La duración de la película no puede ser menor o igual a 0");
+        }
+        if(film.getSynopsis() == null) {
+            throw new ValidationException("La sinopsis de la película no puede estar vacía");
+        }
+        if(film.getYear() == null) {
+            throw new ValidationException("El año de la película no puede estar vacío");
+        }
+
+    }
+    void existsFilmByTitle(String title) {
+        if (filmRepository.existsFilmByTitle(title)) {
+            throw new ValidationException("No se puede agregar la película, puesto que una con su mismo titulo ya existe");
+        }
+    }
 
 }

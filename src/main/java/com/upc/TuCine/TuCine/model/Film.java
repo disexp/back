@@ -27,9 +27,9 @@ public class Film {
     private Integer year;
     @Column(name = "synopsis", length = 5000, nullable = false)
     private String synopsis;
-    @Column(name = "poster", length = 5000, nullable = false)
+    @Column(name = "poster", length = 5000, nullable = true)
     private String poster;
-    @Column(name = "trailer", length = 5000, nullable = false)
+    @Column(name = "trailer", length = 5000, nullable = true)
     private String trailer;
     @Column(name = "duration", nullable = false)
     private Integer duration;

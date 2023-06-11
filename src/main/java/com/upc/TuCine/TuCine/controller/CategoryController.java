@@ -1,6 +1,7 @@
 package com.upc.TuCine.TuCine.controller;
 
 
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Category;
 import com.upc.TuCine.TuCine.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,21 @@ public class CategoryController {
     @Transactional
     @PostMapping("/categories")
     public ResponseEntity<Category> createCategory(@RequestBody Category category){
+        existsCategoryByName(category.getName());
+        validateCategory(category);
         return new ResponseEntity<Category>(categoryRepository.save(category), HttpStatus.CREATED);
+    }
+
+    private void validateCategory(Category category) {
+        if (category.getName() == null || category.getName().isEmpty()) {
+            throw new ValidationException("El nombre de la categoria es obligatorio");
+        }
+    }
+
+    private void existsCategoryByName(String name) {
+        if (categoryRepository.existsByName(name)) {
+            throw new ValidationException("No se puede registrar la categoria, ya existe una con ese nombre");
+        }
     }
 
 

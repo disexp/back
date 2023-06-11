@@ -44,7 +44,24 @@ public class ContentRatingController {
     @Transactional
     @PostMapping("/contentRatings")
     public ResponseEntity<ContentRating> createContentRating(@RequestBody ContentRating contentRating){
+        validateContentRating(contentRating);
+        existsContentRatingByName(contentRating.getName());
         return new ResponseEntity<ContentRating>(contentRatingRepository.save(contentRating), HttpStatus.CREATED);
+    }
+
+    void validateContentRating(ContentRating contentRating) {
+        if (contentRating.getName() == null || contentRating.getName().isEmpty()) {
+            throw new RuntimeException("El nombre de la clasificacion es requerido");
+        }
+        if(contentRating.getDescription() == null || contentRating.getDescription().isEmpty()){
+            throw new RuntimeException("La descripcion de la clasificacion es requerida");
+        }
+    }
+
+    void existsContentRatingByName(String name) {
+        if (contentRatingRepository.existsContentRatingByName(name)) {
+            throw new RuntimeException("No se puede registrar la clasificación, ya existe uno con ese nombre");
+        }
     }
     
 
