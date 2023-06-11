@@ -1,6 +1,7 @@
 package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.model.Business;
+import com.upc.TuCine.TuCine.model.BusinessType;
 import com.upc.TuCine.TuCine.repository.BusinessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,15 @@ public class BusinessController {
     @GetMapping("/businesses")
     public ResponseEntity<List<Business>> getAllBusinesses() {
         return new ResponseEntity<List<Business>>(businessRepository.findAll(), HttpStatus.OK);
+    }
+    @Transactional(readOnly = true)
+    @GetMapping("/businesses/{id}/businessTypes")
+    public ResponseEntity<List<BusinessType>> getAllBusinessTypesByBusinessId(@PathVariable("id") Integer id) {
+        Business business = businessRepository.findById(id).orElse(null); // Obtener el business por su ID
+        if (business == null) {
+            return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el business
+        }
+        return new ResponseEntity<List<BusinessType>>(business.getBusinessTypes(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/businesses
