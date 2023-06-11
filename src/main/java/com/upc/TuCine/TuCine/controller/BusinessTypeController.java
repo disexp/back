@@ -22,6 +22,14 @@ public class BusinessTypeController {
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/businessTypes
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/businessTypes")
+    public ResponseEntity<List<BusinessType>> getAllBusinessTypes() {
+        return new ResponseEntity<List<BusinessType>>(businessTypeRepository.findAll(), HttpStatus.OK);
+    }
+
+    //URL: http://localhost:8080/api/TuCine/v1/businessTypes
     //Method: POST
     @Transactional
     @PostMapping("/businessTypes")
