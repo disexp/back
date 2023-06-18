@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://backend-tucine-production.up.railway.app")
 @RequestMapping("/api/TuCine/v1")
 public class PersonController {
 
