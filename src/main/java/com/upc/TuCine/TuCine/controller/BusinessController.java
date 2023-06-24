@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://backend-tucine-production.up.railway.app")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/TuCine/v1")
 public class BusinessController {
 
