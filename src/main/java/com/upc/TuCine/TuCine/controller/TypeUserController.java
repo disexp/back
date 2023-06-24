@@ -3,6 +3,9 @@ package com.upc.TuCine.TuCine.controller;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.TypeUser;
 import com.upc.TuCine.TuCine.repository.TypeUserRepository;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "https://backend-tucine-production.up.railway.app")
 @RequestMapping("/api/TuCine/v1")
+
 public class TypeUserController {
 
     @Autowired
@@ -27,6 +31,7 @@ public class TypeUserController {
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/typeUsers")
+    @Operation(summary = "Obtener todos los TypeUsers", description = "Obtiene la lista de todos los tipos de usuarios disponibles")
     public ResponseEntity<List<TypeUser>> getAllTypeUsers() {
         return new ResponseEntity<List<TypeUser>>(typeUserRepository.findAll(), HttpStatus.OK);
     }
@@ -35,6 +40,7 @@ public class TypeUserController {
     //Method: POST
     @Transactional
     @PostMapping("/typeUsers")
+    @Operation(summary = "Crear un nuevo TypeUser", description = "Crea un nuevo tipo de usuario con la información proporcionada")
     public ResponseEntity<TypeUser> createTypeUser(@RequestBody TypeUser typeUser){
         validateTypeUser(typeUser);
         existsTypeUserByName(typeUser.getName());
