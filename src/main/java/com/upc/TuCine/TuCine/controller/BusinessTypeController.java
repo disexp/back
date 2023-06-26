@@ -31,6 +31,18 @@ public class BusinessTypeController {
         return new ResponseEntity<List<BusinessType>>(businessTypeRepository.findAll(), HttpStatus.OK);
     }
 
+    //URL: http://localhost:8080/api/TuCine/v1/businessTypes/{id}
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/businessTypes/{id}")
+    public ResponseEntity<BusinessType> getBusinessTypeById(@PathVariable(value = "id") Integer id) {
+        BusinessType businessType = businessTypeRepository.findById(id).orElse(null);
+        if (businessType == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<BusinessType>(businessType, HttpStatus.OK);
+    }
+
     //URL: http://localhost:8080/api/TuCine/v1/businessTypes
     //Method: POST
     @Transactional

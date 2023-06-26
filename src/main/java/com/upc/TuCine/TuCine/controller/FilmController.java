@@ -57,6 +57,8 @@ public class FilmController {
         return ResponseEntity.ok(film);
     }
 
+    //Get all t
+
     //URL: http://localhost:8080/api/TuCine/v1/films
     //Method: POST
     @Transactional
@@ -69,9 +71,6 @@ public class FilmController {
         film.setContentRating_id(contentRating);
         return new ResponseEntity<>(filmRepository.save(film), HttpStatus.CREATED);
     }
-
-
-    // URL: http://localhost:8080/api/TuCine/v1/films/
 
     // URL: http://localhost:8080/api/TuCine/v1/films/{filmId}/categories/{categoryId}
     // Method: POST
