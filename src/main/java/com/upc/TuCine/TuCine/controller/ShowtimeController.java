@@ -50,6 +50,18 @@ public class ShowtimeController {
         return new ResponseEntity<List<Showtime>>(showtimeRepository.findAll(), HttpStatus.OK);
     }
 
+    //URL: http://localhost:8080/api/TuCine/v1/showtimes/{id}
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/showtimes/{id}")
+    public ResponseEntity<Showtime> getShowtimeById(@PathVariable(value = "id") Integer id) {
+        Showtime showtime = showtimeRepository.findById(id).orElse(null);
+        if (showtime == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(showtime, HttpStatus.OK);
+    }
+
     //URL: http://localhost:8080/api/TuCine/v1/showtimes
     //Method: POST
     @Transactional
