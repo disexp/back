@@ -40,6 +40,37 @@ public class PromotionController {
         return new ResponseEntity<>(promotionRepository.save(promotion), HttpStatus.CREATED);
     }
 
+    //URL: http://localhost:8080/api/TuCine/v1/promotions/{id}
+    //Method: PUT
+    @Transactional
+    @PutMapping("/promotions/{id}")
+    public ResponseEntity<Promotion> updatePromotion(@PathVariable Integer id, @RequestBody Promotion promotion){
+        Promotion promotionToUpdate = promotionRepository.findById(id).orElse(null);
+        if(promotionToUpdate == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        validatePromotion(promotion);
+        promotionToUpdate.setTitle(promotion.getTitle());
+        promotionToUpdate.setDescription(promotion.getDescription());
+        promotionToUpdate.setStartDate(promotion.getStartDate());
+        promotionToUpdate.setEndDate(promotion.getEndDate());
+        promotionToUpdate.setDiscount(promotion.getDiscount());
+        return new ResponseEntity<>(promotionRepository.save(promotionToUpdate), HttpStatus.OK);
+    }
+
+    //URL: http://localhost:8080/api/TuCine/v1/promotions/{id}
+    //Method: DELETE
+    @Transactional
+    @DeleteMapping("/promotions/{id}")
+    public ResponseEntity<Promotion> deletePromotion(@PathVariable Integer id){
+        Promotion promotionToDelete = promotionRepository.findById(id).orElse(null);
+        if(promotionToDelete == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        promotionRepository.delete(promotionToDelete);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     private void validatePromotion(Promotion promotion) {
         if (promotion.getTitle() == null || promotion.getTitle().isEmpty()) {
             throw new RuntimeException("El titulo no puede ser nulo o estar vacío");
