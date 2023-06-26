@@ -39,7 +39,7 @@ public class Showtime {
     @ManyToOne
     @JoinColumn(name = "film_id", nullable = false, foreignKey = @ForeignKey(name = "FK_SHOWTIME_FILM"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Film Film_id;
+    private Film film;
 
     @ManyToOne
     @JoinColumn(name = "business_id", nullable = false, foreignKey = @ForeignKey(name = "FK_SHOWTIME_BUSINESS"))

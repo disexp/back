@@ -2,14 +2,8 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.exception.ResourceNotFoundException;
-import com.upc.TuCine.TuCine.model.Actor;
-import com.upc.TuCine.TuCine.model.Category;
-import com.upc.TuCine.TuCine.model.ContentRating;
-import com.upc.TuCine.TuCine.model.Film;
-import com.upc.TuCine.TuCine.repository.ActorRepository;
-import com.upc.TuCine.TuCine.repository.CategoryRepository;
-import com.upc.TuCine.TuCine.repository.ContentRatingRepository;
-import com.upc.TuCine.TuCine.repository.FilmRepository;
+import com.upc.TuCine.TuCine.model.*;
+import com.upc.TuCine.TuCine.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +25,15 @@ public class FilmController {
     private ContentRatingRepository contentRatingRepository;
     @Autowired
     private ActorRepository actorRepository;
-    
-    public FilmController(FilmRepository filmRepository, CategoryRepository categoryRepository, ContentRatingRepository contentRatingRepository,ActorRepository actorRepository) {
+    @Autowired
+    private ShowtimeRepository showtimeRepository;
+    public FilmController(FilmRepository filmRepository, CategoryRepository categoryRepository, ContentRatingRepository contentRatingRepository,ActorRepository actorRepository,ShowtimeRepository showtimeRepository) {
         this.filmRepository = filmRepository;
         this.categoryRepository = categoryRepository;
         this.contentRatingRepository = contentRatingRepository;
         this.actorRepository = actorRepository;
+        this.showtimeRepository = showtimeRepository;
+
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/films
@@ -104,6 +101,19 @@ public class FilmController {
             return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el film
         }
         return new ResponseEntity<List<Category>>(film.getCategories(), HttpStatus.OK);
+    }
+
+    //Get all the Showtimes of a Film by Film ID
+    //URL: http://localhost:8080/api/TuCine/v1/films/{id}/showtimes
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/films/{id}/showtimes")
+    public ResponseEntity<List<Showtime>> getAllShowtimesByFilmId(@PathVariable("id") Integer id) {
+        Film film = filmRepository.findById(id).orElse(null); // Obtener el film por su ID
+        if (film == null) {
+            return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el film
+        }
+        return new ResponseEntity<List<Showtime>>(showtimeRepository.findAllByFilm_id(film.getId()), HttpStatus.OK);
     }
 
     //Get All Actors By Film ID

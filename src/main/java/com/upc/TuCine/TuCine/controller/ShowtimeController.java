@@ -56,7 +56,7 @@ public class ShowtimeController {
     @PostMapping("/showtimes")
     public ResponseEntity<Showtime> createShowtime(@RequestBody Showtime showtime){
         validateShowtime(showtime);
-        existsFilmById(showtime.getFilm_id().getId());
+        existsFilmById(showtime.getFilm().getId());
         existsBusinessById(showtime.getBusiness_id().getId());
         //existsPromotionById(showtime.getPromotion_id().getId());
         return new ResponseEntity<>(showtimeRepository.save(showtime), HttpStatus.CREATED);
@@ -66,7 +66,7 @@ public class ShowtimeController {
     //Method: UPDATE
     @Transactional
     @PutMapping("/showtimes/{id}")
-    public ResponseEntity<Showtime> updateShowtime(@PathVariable Integer id, @RequestBody Showtime showtime) {
+    public ResponseEntity<Showtime> updateShowtime(@PathVariable(value = "id") Integer id, @RequestBody Showtime showtime) {
         Showtime showtimeDB = showtimeRepository.findById(id).orElse(null);
         if (showtimeDB == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -74,7 +74,7 @@ public class ShowtimeController {
         showtimeDB.setDate(showtime.getDate());
         showtimeDB.setTime(showtime.getTime());
         showtimeDB.setPrice(showtime.getPrice());
-        showtimeDB.setFilm_id(showtime.getFilm_id());
+        showtimeDB.setFilm(showtime.getFilm());
         showtimeDB.setBusiness_id(showtime.getBusiness_id());
         showtimeDB.setPromotion_id(showtime.getPromotion_id());
         return new ResponseEntity<>(showtimeRepository.save(showtimeDB), HttpStatus.OK);
@@ -84,22 +84,13 @@ public class ShowtimeController {
     //Method: DELETE
     @Transactional
     @DeleteMapping("/showtimes/{id}")
-    public ResponseEntity<Showtime> deleteShowtime(@PathVariable("id") Integer id) {
+    public ResponseEntity<Showtime> deleteShowtime(@PathVariable(value = "id") Integer id) {
         Showtime showtimeDB = showtimeRepository.findById(id).orElse(null);
         if (showtimeDB == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         showtimeRepository.delete(showtimeDB);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    //Get showtimes by film id
-    //URL: http://localhost:8080/api/TuCine/v1/showtimes/film/{id}
-    //Method: GET
-    @Transactional(readOnly = true)
-    @GetMapping("/showtimes/film/{id}")
-    public ResponseEntity<List<Showtime>> getShowtimesByFilmId(@PathVariable("id") Integer id) {
-        return new ResponseEntity<List<Showtime>>(showtimeRepository.findAllByFilm_id(id), HttpStatus.OK);
     }
 
     private void validateShowtime(Showtime showtime) {
@@ -132,4 +123,6 @@ public class ShowtimeController {
             throw new RuntimeException("La promoción no existe");
         }
     }
+
+
 }
