@@ -93,6 +93,14 @@ public class ShowtimeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //Get showtimes by film id
+    //URL: http://localhost:8080/api/TuCine/v1/showtimes/film/{id}
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/showtimes/film/{id}")
+    public ResponseEntity<List<Showtime>> getShowtimesByFilmId(@PathVariable Integer id) {
+        return new ResponseEntity<List<Showtime>>(showtimeRepository.findByFilmId(id), HttpStatus.OK);
+    }
 
     private void validateShowtime(Showtime showtime) {
         if (showtime.getDate() == null) {
