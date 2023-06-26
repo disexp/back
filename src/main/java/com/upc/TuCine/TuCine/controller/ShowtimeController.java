@@ -84,7 +84,7 @@ public class ShowtimeController {
     //Method: DELETE
     @Transactional
     @DeleteMapping("/showtimes/{id}")
-    public ResponseEntity<Showtime> deleteShowtime(@PathVariable Integer id) {
+    public ResponseEntity<Showtime> deleteShowtime(@PathVariable("id") Integer id) {
         Showtime showtimeDB = showtimeRepository.findById(id).orElse(null);
         if (showtimeDB == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -98,8 +98,8 @@ public class ShowtimeController {
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/showtimes/film/{id}")
-    public ResponseEntity<List<Showtime>> getShowtimesByFilmId(@PathVariable Integer id) {
-        return new ResponseEntity<List<Showtime>>(showtimeRepository.findByFilmId(id), HttpStatus.OK);
+    public ResponseEntity<List<Showtime>> getShowtimesByFilmId(@PathVariable("id") Integer id) {
+        return new ResponseEntity<List<Showtime>>(showtimeRepository.findAllByFilm_id(id), HttpStatus.OK);
     }
 
     private void validateShowtime(Showtime showtime) {
