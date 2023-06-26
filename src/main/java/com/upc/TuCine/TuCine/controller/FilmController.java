@@ -44,6 +44,19 @@ public class FilmController {
         return new ResponseEntity<List<Film>>(filmRepository.findAll(), HttpStatus.OK);
     }
 
+
+    //URL: http://localhost:8080/api/TuCine/v1/films/{filmId}
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/films/{filmId}")
+    public ResponseEntity<Film> getFilmById(@PathVariable("filmId") Integer filmId) {
+        Film film = filmRepository.findById(filmId).orElse(null); // Obtener el film por su ID
+        if (film == null) {
+            return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el film
+        }
+        return ResponseEntity.ok(film);
+    }
+
     //URL: http://localhost:8080/api/TuCine/v1/films
     //Method: POST
     @Transactional
