@@ -51,6 +51,6 @@ public class Business {
 
     @ManyToOne
     @JoinColumn(name = "BusinessType_id",nullable = false, foreignKey = @ForeignKey(name = "FK_DISTRICT_ID"))
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
     private BusinessType BusinessType_id;
 }
