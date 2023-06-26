@@ -18,9 +18,6 @@ public class ShowtimeServiceImpl implements ShowtimeService {
         this.showtimeRepository = showtimeRepository;
     }
 
-    @Override
-    public List<Showtime> findByFilmId(Integer id) {
-        return showtimeRepository.findByFilmId(id);
-    }
+
 
 }
