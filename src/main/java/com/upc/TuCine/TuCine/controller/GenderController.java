@@ -2,8 +2,6 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.GenderDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.model.Gender;
-import com.upc.TuCine.TuCine.repository.GenderRepository;
 import com.upc.TuCine.TuCine.service.GenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

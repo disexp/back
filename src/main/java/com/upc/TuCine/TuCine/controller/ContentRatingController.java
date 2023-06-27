@@ -3,8 +3,6 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.ContentRatingDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.model.ContentRating;
-import com.upc.TuCine.TuCine.repository.ContentRatingRepository;
 import com.upc.TuCine.TuCine.service.ContentRatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,6 @@
 package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.PromotionDto;
-import com.upc.TuCine.TuCine.model.Promotion;
-import com.upc.TuCine.TuCine.repository.PromotionRepository;
 import com.upc.TuCine.TuCine.service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -3,8 +3,6 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.CategoryDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.model.Category;
-import com.upc.TuCine.TuCine.repository.CategoryRepository;
 import com.upc.TuCine.TuCine.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

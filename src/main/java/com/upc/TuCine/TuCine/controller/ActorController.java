@@ -2,8 +2,6 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.ActorDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.model.Actor;
-import com.upc.TuCine.TuCine.repository.ActorRepository;
 import com.upc.TuCine.TuCine.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

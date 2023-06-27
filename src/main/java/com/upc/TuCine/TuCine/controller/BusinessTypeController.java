@@ -2,8 +2,6 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.BusinessTypeDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.model.BusinessType;
-import com.upc.TuCine.TuCine.repository.BusinessTypeRepository;
 import com.upc.TuCine.TuCine.service.BusinessTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,10 +1,7 @@
 package com.upc.TuCine.TuCine.controller;
 
-import com.upc.TuCine.TuCine.model.Showtime;
-import com.upc.TuCine.TuCine.repository.BusinessRepository;
-import com.upc.TuCine.TuCine.repository.FilmRepository;
-import com.upc.TuCine.TuCine.repository.PromotionRepository;
-import com.upc.TuCine.TuCine.repository.ShowtimeRepository;
+import com.upc.TuCine.TuCine.dto.ShowtimeDto;
+import com.upc.TuCine.TuCine.service.ShowtimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,122 +16,67 @@ import java.util.List;
 public class ShowtimeController {
 
     @Autowired
-    private ShowtimeRepository showtimeRepository;
+    private ShowtimeService showtimeService;
 
-    @Autowired
-    private FilmRepository filmRepository;
-
-    @Autowired
-    private BusinessRepository businessRepository;
-
-    @Autowired
-    private PromotionRepository promotionRepository;
-
-    public ShowtimeController(
-            ShowtimeRepository showtimeRepository,
-            FilmRepository filmRepository,
-            BusinessRepository businessRepository,
-            PromotionRepository promotionRepository
-    ) {
-        this.showtimeRepository = showtimeRepository;
-        this.filmRepository = filmRepository;
-        this.businessRepository = businessRepository;
-        this.promotionRepository = promotionRepository;
+    public ShowtimeController(ShowtimeService showtimeService) {
+        this.showtimeService = showtimeService;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/showtimes
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/showtimes")
-    public ResponseEntity<List<Showtime>> getAllShowtimes() {
-        return new ResponseEntity<List<Showtime>>(showtimeRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<ShowtimeDto>> getAllShowtimes() {
+        return new ResponseEntity<>(showtimeService.getAllShowtimes(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/showtimes/{id}
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/showtimes/{id}")
-    public ResponseEntity<Showtime> getShowtimeById(@PathVariable(value = "id") Integer id) {
-        Showtime showtime = showtimeRepository.findById(id).orElse(null);
-        if (showtime == null) {
+    public ResponseEntity<ShowtimeDto> getShowtimeById(@PathVariable(value = "id") Integer id) {
+        ShowtimeDto showtimeDto = showtimeService.getShowtimeById(id);
+        if (showtimeDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(showtime, HttpStatus.OK);
+        return new ResponseEntity<>(showtimeDto, HttpStatus.OK);
     }
+
 
     //URL: http://localhost:8080/api/TuCine/v1/showtimes
     //Method: POST
     @Transactional
     @PostMapping("/showtimes")
-    public ResponseEntity<Showtime> createShowtime(@RequestBody Showtime showtime){
-        validateShowtime(showtime);
-        existsFilmById(showtime.getFilm().getId());
-        existsBusinessById(showtime.getBusiness_id().getId());
-        //existsPromotionById(showtime.getPromotion_id().getId());
-        return new ResponseEntity<>(showtimeRepository.save(showtime), HttpStatus.CREATED);
+    public ResponseEntity<ShowtimeDto> createShowtime(@RequestBody ShowtimeDto showtimeDto) {
+        ShowtimeDto createdShowtimeDto = showtimeService.createShowtime(showtimeDto);
+        return new ResponseEntity<>(createdShowtimeDto, HttpStatus.CREATED);
     }
+
 
     //URL: http://localhost:8080/api/TuCine/v1/showtimes/{id}
     //Method: UPDATE
     @Transactional
     @PutMapping("/showtimes/{id}")
-    public ResponseEntity<Showtime> updateShowtime(@PathVariable(value = "id") Integer id, @RequestBody Showtime showtime) {
-        Showtime showtimeDB = showtimeRepository.findById(id).orElse(null);
-        if (showtimeDB == null) {
+    public ResponseEntity<ShowtimeDto> updateShowtime(@PathVariable(value = "id") Integer id, @RequestBody ShowtimeDto showtimeDto) {
+        ShowtimeDto updatedShowtimeDto = showtimeService.updateShowtime(id, showtimeDto);
+        if (updatedShowtimeDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        showtimeDB.setDate(showtime.getDate());
-        showtimeDB.setTime(showtime.getTime());
-        showtimeDB.setPrice(showtime.getPrice());
-        showtimeDB.setFilm(showtime.getFilm());
-        showtimeDB.setBusiness_id(showtime.getBusiness_id());
-        showtimeDB.setPromotion_id(showtime.getPromotion_id());
-        return new ResponseEntity<>(showtimeRepository.save(showtimeDB), HttpStatus.OK);
+        return new ResponseEntity<>(updatedShowtimeDto, HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/showtimes/{id}
     //Method: DELETE
     @Transactional
     @DeleteMapping("/showtimes/{id}")
-    public ResponseEntity<Showtime> deleteShowtime(@PathVariable(value = "id") Integer id) {
-        Showtime showtimeDB = showtimeRepository.findById(id).orElse(null);
-        if (showtimeDB == null) {
+    public ResponseEntity<Void> deleteShowtime(@PathVariable(value = "id") Integer id) {
+        ShowtimeDto deletedShowtimeDto = showtimeService.deleteShowtime(id);
+        if (deletedShowtimeDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        showtimeRepository.delete(showtimeDB);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void validateShowtime(Showtime showtime) {
-        if (showtime.getDate() == null) {
-            throw new RuntimeException("La fecha es obligatoria");
-        }
-        if (showtime.getTime() == null ) {
-            throw new RuntimeException("La hora es obligatoria");
-        }
-        if (showtime.getPrice() == null ) {
-            throw new RuntimeException("El precio es obligatorio");
-        }
-
-    }
-
-    private void existsFilmById(Integer id) {
-        if (!filmRepository.existsById(id)) {
-            throw new RuntimeException("La película no existe");
-        }
-    }
-
-    private void existsBusinessById(Integer id) {
-        if (!businessRepository.existsById(id)) {
-            throw new RuntimeException("El negocio no existe");
-        }
-    }
-
-    private void existsPromotionById(Integer id) {
-        if (!promotionRepository.existsById(id)) {
-            throw new RuntimeException("La promoción no existe");
-        }
-    }
 
 
 }

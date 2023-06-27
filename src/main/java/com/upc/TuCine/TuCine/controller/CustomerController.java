@@ -2,9 +2,6 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.CustomerDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.model.Customer;
-import com.upc.TuCine.TuCine.repository.CustomerRepository;
-import com.upc.TuCine.TuCine.repository.PersonRepository;
 import com.upc.TuCine.TuCine.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

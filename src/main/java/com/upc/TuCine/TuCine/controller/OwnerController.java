@@ -2,11 +2,7 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.OwnerDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.model.Owner;
-import com.upc.TuCine.TuCine.repository.OwnerRepository;
-import com.upc.TuCine.TuCine.repository.PersonRepository;
 import com.upc.TuCine.TuCine.service.OwnerService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

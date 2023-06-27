@@ -2,9 +2,6 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.*;
 import com.upc.TuCine.TuCine.exception.ValidationException;
-import com.upc.TuCine.TuCine.exception.ResourceNotFoundException;
-import com.upc.TuCine.TuCine.model.*;
-import com.upc.TuCine.TuCine.repository.*;
 import com.upc.TuCine.TuCine.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
