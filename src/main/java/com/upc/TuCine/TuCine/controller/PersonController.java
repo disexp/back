@@ -1,8 +1,11 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.dto.PersonDto;
+import com.upc.TuCine.TuCine.dto.TypeUserDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.*;
 import com.upc.TuCine.TuCine.repository.PersonRepository;
+import com.upc.TuCine.TuCine.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,43 +21,44 @@ import java.util.Optional;
 public class PersonController {
 
     @Autowired
-    private PersonRepository personRepository;
-    public PersonController(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    private PersonService personService;
+
+    public PersonController(PersonService personService) {
+        this.personService = personService;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/persons
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/persons")
-    public ResponseEntity<List<Person>> getAllPersons() {
-        return new ResponseEntity<List<Person>>(personRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<PersonDto>> getAllPersons() {
+        return new ResponseEntity<>(personService.getAllPersons(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/persons/{id}/typeUser
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/persons/{id}/typeUser")
-    public ResponseEntity<TypeUser> getTypeUserByPersonId(@PathVariable("id") Integer id) {
-        Person person = personRepository.findById(id).orElse(null); // Obtener el person por su ID
-        if (person == null) {
-            return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el person
+    public ResponseEntity<TypeUserDto> getTypeUserByPersonId(@PathVariable("id") Integer id) {
+        TypeUserDto typeUserDto= personService.getTypeUserByPersonId(id);
+        if (typeUserDto == null) {
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<TypeUser>(person.getTypeUser_id(), HttpStatus.OK);
+        return new ResponseEntity<>(typeUserDto, HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/persons
     //Method: POST
     @Transactional
     @PostMapping("/persons")
-    public ResponseEntity<Person> createPerson(@RequestBody Person person){
-        validatePerson(person);
-        existsByPersonEmail(person.getEmail());
-        existByPersonDni(person.getNumberDni());
-        return new ResponseEntity<Person>(personRepository.save(person), HttpStatus.CREATED);
+    public ResponseEntity<PersonDto> createPerson(@RequestBody PersonDto personDto){
+        validatePerson(personDto);
+        existsByPersonEmail(personDto.getEmail());
+        existByPersonDni(personDto.getNumberDni());
+        return new ResponseEntity<>(personService.createPerson(personDto), HttpStatus.CREATED);
     }
 
-    void validatePerson(Person person) {
+    void validatePerson(PersonDto person) {
         if (person.getFirstName() == null || person.getFirstName().isEmpty()) {
             throw new ValidationException("El nombre de la persona es obligatorio");
         }
@@ -73,25 +77,25 @@ public class PersonController {
         if(person.getBirthdate()==null){
             throw new ValidationException("La fecha de nacimiento de la persona es obligatorio");
         }
-        if(person.getGender_id()==null ){
+        if(person.getGender()==null ){
             throw new ValidationException("El género de la persona es obligatorio");
         }
         if(person.getPhone()==null || person.getPhone().isEmpty()){
             throw new ValidationException("El teléfono de la persona es obligatorio");
         }
-        if(person.getTypeUser_id()==null){
+        if(person.getTypeUser()==null){
             throw new ValidationException("El tipo de usuario de la persona es obligatorio");
         }
     }
 
     void existsByPersonEmail(String email) {
-        if (personRepository.existsPersonByEmail(email)) {
+        if (personService.existsByPersonEmail(email)) {
             throw new ValidationException("Ya existe una persona registrada con ese email");
         }
     }
 
     void existByPersonDni(String dni) {
-        if (personRepository.existsPersonByNumberDni(dni)) {
+        if (personService.existsPersonByNumberDni(dni)) {
             throw new ValidationException("Ya existe una persona registrada con ese DNI");
         }
     }
