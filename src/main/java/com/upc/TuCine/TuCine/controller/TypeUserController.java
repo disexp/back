@@ -1,8 +1,11 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.dto.TicketDto;
+import com.upc.TuCine.TuCine.dto.TypeUserDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.TypeUser;
 import com.upc.TuCine.TuCine.repository.TypeUserRepository;
+import com.upc.TuCine.TuCine.service.TypeUserService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -21,10 +24,10 @@ import java.util.List;
 public class TypeUserController {
 
     @Autowired
-    private TypeUserRepository typeUserRepository;
+    private TypeUserService typeUserService;
 
-    public TypeUserController(TypeUserRepository typeUserRepository) {
-        this.typeUserRepository = typeUserRepository;
+    public TypeUserController(TypeUserService typeUserService) {
+        this.typeUserService = typeUserService;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/typeUsers
@@ -32,8 +35,8 @@ public class TypeUserController {
     @Transactional(readOnly = true)
     @GetMapping("/typeUsers")
     @Operation(summary = "Obtener todos los TypeUsers", description = "Obtiene la lista de todos los tipos de usuarios disponibles")
-    public ResponseEntity<List<TypeUser>> getAllTypeUsers() {
-        return new ResponseEntity<List<TypeUser>>(typeUserRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<TypeUserDto>> getAllTypeUsers() {
+        return new ResponseEntity<List<TypeUserDto>>(typeUserService.getAllTypeUsers(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/typeUsers
@@ -41,21 +44,9 @@ public class TypeUserController {
     @Transactional
     @PostMapping("/typeUsers")
     @Operation(summary = "Crear un nuevo TypeUser", description = "Crea un nuevo tipo de usuario con la información proporcionada")
-    public ResponseEntity<TypeUser> createTypeUser(@RequestBody TypeUser typeUser){
-        validateTypeUser(typeUser);
-        existsTypeUserByName(typeUser.getName());
-        return new ResponseEntity<TypeUser>(typeUserRepository.save(typeUser), HttpStatus.CREATED);
+    public ResponseEntity<TypeUserDto> createTypeUser(@RequestBody TypeUserDto typeUser){
+        TypeUserDto createdTypeUserDto= typeUserService.createTypeUser(typeUser);
+        return new ResponseEntity<>(createdTypeUserDto, HttpStatus.CREATED);
     }
 
-    void validateTypeUser(TypeUser typeUser) {
-        if (typeUser.getName() == null || typeUser.getName().isEmpty()) {
-            throw new ValidationException("El nombre del tipo de usuario no puede estar vacío");
-        }
-    }
-
-    void existsTypeUserByName(String name) {
-        if (typeUserRepository.existsTypeUserByName(name)) {
-            throw new ValidationException("El tipo de usuario ya existe con este nombre");
-        }
-    }
 }
