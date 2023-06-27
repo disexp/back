@@ -10,7 +10,7 @@ public interface BusinessService {
 
     BusinessDto createBusiness(BusinessDto businessDto);
 
-    List<Business> getAllBusiness();
+    List<BusinessDto> getAllBusiness();
 
     BusinessDto getBusinessById(Integer id);
 

@@ -30,8 +30,8 @@ public class BusinessController {
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/businesses")
-    public ResponseEntity<List<Business>> getAllBusinesses() {
-        return new ResponseEntity<List<Business>>(businessService.getAllBusiness(), HttpStatus.OK);
+    public ResponseEntity<List<BusinessDto>> getAllBusinesses() {
+        return new ResponseEntity<>(businessService.getAllBusiness(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/businesses/{id}
@@ -68,7 +68,7 @@ public class BusinessController {
         existsByBusinessName(businessDto.getName());
         existsByBusinessRuc(businessDto.getRuc());
         existsByBusinessEmail(businessDto.getEmail());
-        return new ResponseEntity<BusinessDto>(businessService.createBusiness(businessDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(businessService.createBusiness(businessDto), HttpStatus.CREATED);
     }
 
     public void validateBusiness(BusinessDto business) {

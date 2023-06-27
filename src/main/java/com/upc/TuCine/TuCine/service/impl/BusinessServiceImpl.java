@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BusinessServiceImpl implements BusinessService {
@@ -44,8 +45,11 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public List<Business> getAllBusiness() {
-        return businessRepository.findAll();
+    public List<BusinessDto> getAllBusiness() {
+        List<Business> businesses = businessRepository.findAll();
+        return businesses.stream()
+                .map(this::EntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
