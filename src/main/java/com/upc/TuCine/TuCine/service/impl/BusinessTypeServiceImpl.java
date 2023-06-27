@@ -1,10 +1,7 @@
 package com.upc.TuCine.TuCine.service.impl;
 
-import com.upc.TuCine.TuCine.dto.BusinessDto;
 import com.upc.TuCine.TuCine.dto.BusinessTypeDto;
-import com.upc.TuCine.TuCine.model.Business;
 import com.upc.TuCine.TuCine.model.BusinessType;
-import com.upc.TuCine.TuCine.repository.BusinessRepository;
 import com.upc.TuCine.TuCine.repository.BusinessTypeRepository;
 import com.upc.TuCine.TuCine.service.BusinessTypeService;
 import org.modelmapper.ModelMapper;

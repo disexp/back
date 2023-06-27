@@ -1,8 +1,6 @@
 package com.upc.TuCine.TuCine.service.impl;
 
-import com.upc.TuCine.TuCine.dto.BusinessTypeDto;
 import com.upc.TuCine.TuCine.dto.ContentRatingDto;
-import com.upc.TuCine.TuCine.model.BusinessType;
 import com.upc.TuCine.TuCine.model.ContentRating;
 import com.upc.TuCine.TuCine.repository.ContentRatingRepository;
 import com.upc.TuCine.TuCine.service.ContentRatingService;

@@ -4,7 +4,6 @@ import com.upc.TuCine.TuCine.dto.*;
 import com.upc.TuCine.TuCine.exception.ResourceNotFoundException;
 import com.upc.TuCine.TuCine.model.*;
 import com.upc.TuCine.TuCine.repository.*;
-import com.upc.TuCine.TuCine.service.ContentRatingService;
 import com.upc.TuCine.TuCine.service.FilmService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
