@@ -1,8 +1,10 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.dto.ActorDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Actor;
 import com.upc.TuCine.TuCine.repository.ActorRepository;
+import com.upc.TuCine.TuCine.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,10 @@ import java.util.List;
 public class ActorController {
 
     @Autowired
-    private ActorRepository actorRepository;
+    private ActorService actorService;
 
-    public ActorController(ActorRepository actorRepository) {
-        this.actorRepository = actorRepository;
+    public ActorController(ActorService actorService) {
+        this.actorService = actorService;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/actors
@@ -27,20 +29,20 @@ public class ActorController {
     @Transactional(readOnly = true)
     @GetMapping("/actors")
     public ResponseEntity<List<Actor>> getAllActors() {
-        return new ResponseEntity<List<Actor>>(actorRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<List<Actor>>(actorService.getAllActors(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/actors
     //Method: POST
     @Transactional
     @PostMapping("/actors")
-    public ResponseEntity<Actor> createActor(@RequestBody Actor actor){
-        existActorByFirstName(actor.getFirstName(),actor.getLastName());
-        validateActor(actor);
-        return new ResponseEntity<Actor>(actorRepository.save(actor), HttpStatus.CREATED);
+    public ResponseEntity<ActorDto> createActor(@RequestBody ActorDto actorDto){
+        existActorByFirstName(actorDto.getFirstName(),actorDto.getLastName());
+        validateActor(actorDto);
+        return new ResponseEntity<ActorDto>(actorService.createActor(actorDto), HttpStatus.CREATED);
     }
 
-    void validateActor(Actor actor) {
+    void validateActor(ActorDto actor) {
         if (actor.getFirstName() == null || actor.getFirstName().isEmpty()) {
             throw new ValidationException("El nombre es obligatorio");
         }
@@ -53,7 +55,7 @@ public class ActorController {
     }
 
     void existActorByFirstName(String firstName,String lastName){
-        if (actorRepository.existsByFirstNameAndLastName(firstName,lastName)) {
+        if (actorService.existsByFirstNameAndLastName(firstName,lastName)) {
             throw new ValidationException("Ya existe un actor con el nombre " + firstName + " " + lastName);
         }
     }
