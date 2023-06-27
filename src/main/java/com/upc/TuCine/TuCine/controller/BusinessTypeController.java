@@ -1,8 +1,10 @@
 package com.upc.TuCine.TuCine.controller;
 
+import com.upc.TuCine.TuCine.dto.BusinessTypeDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.BusinessType;
 import com.upc.TuCine.TuCine.repository.BusinessTypeRepository;
+import com.upc.TuCine.TuCine.service.BusinessTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,50 +19,51 @@ import java.util.List;
 public class BusinessTypeController {
 
     @Autowired
-    private BusinessTypeRepository businessTypeRepository;
+    private BusinessTypeService businessTypeService;
 
-    public BusinessTypeController(BusinessTypeRepository businessTypeRepository) {
-        this.businessTypeRepository = businessTypeRepository;
+    public BusinessTypeController(BusinessTypeService businessTypeService) {
+        this.businessTypeService = businessTypeService;
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/businessTypes
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/businessTypes")
-    public ResponseEntity<List<BusinessType>> getAllBusinessTypes() {
-        return new ResponseEntity<List<BusinessType>>(businessTypeRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<BusinessTypeDto>> getAllBusinessTypes() {
+        return new ResponseEntity<>(businessTypeService.getAllBusinessTypes(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/businessTypes/{id}
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/businessTypes/{id}")
-    public ResponseEntity<BusinessType> getBusinessTypeById(@PathVariable(value = "id") Integer id) {
-        BusinessType businessType = businessTypeRepository.findById(id).orElse(null);
-        if (businessType == null) {
+    public ResponseEntity<BusinessTypeDto> getBusinessTypeById(@PathVariable(value = "id") Integer id) {
+
+        BusinessTypeDto businessTypeDto = businessTypeService.getBusinessTypeById(id);
+        if (businessTypeDto == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<BusinessType>(businessType, HttpStatus.OK);
+        return new ResponseEntity<>(businessTypeDto, HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/businessTypes
     //Method: POST
     @Transactional
     @PostMapping("/businessTypes")
-    public ResponseEntity<BusinessType> createBusinessType(@RequestBody BusinessType businessType){
-        validateBusinessType(businessType);
-        existsBusinessTypeByName(businessType.getName());
-        return new ResponseEntity<BusinessType>(businessTypeRepository.save(businessType), HttpStatus.CREATED);
+    public ResponseEntity<BusinessTypeDto> createBusinessType(@RequestBody BusinessTypeDto businessTypeDto){
+        validateBusinessType(businessTypeDto);
+        existsBusinessTypeByName(businessTypeDto.getName());
+        return new ResponseEntity<>(businessTypeService.createBusinessType(businessTypeDto), HttpStatus.CREATED);
     }
 
-    void validateBusinessType(BusinessType businessType) {
+    void validateBusinessType(BusinessTypeDto businessType) {
         if (businessType.getName() == null || businessType.getName().isEmpty()) {
             throw new ValidationException("El nombre del tipo de negocio no puede estar vacío");
         }
     }
 
     void existsBusinessTypeByName(String name) {
-        if (businessTypeRepository.existsBusinessTypeByName(name)) {
+        if (businessTypeService.existsBusinessTypeByName(name)) {
             throw new ValidationException("Ya hay un tipo de negocio que existe con este nombre");
         }
     }
