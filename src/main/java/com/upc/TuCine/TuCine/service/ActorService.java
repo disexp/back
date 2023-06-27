@@ -8,7 +8,7 @@ import java.util.List;
 public interface ActorService {
     ActorDto createActor(ActorDto actorDto);
 
-    List<Actor> getAllActors();
+    List<ActorDto> getAllActors();
 
     boolean existsByFirstNameAndLastName(String firstName, String lastName);
 }

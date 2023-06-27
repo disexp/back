@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,9 +39,15 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
-    public List<Actor> getAllActors() {
-        return actorRepository.findAll();
+    public List<ActorDto> getAllActors() {
+        List<Actor> actors = actorRepository.findAll();
+        List<ActorDto> actorDtos = new ArrayList<>();
+        for (Actor actor : actors) {
+            actorDtos.add(EntityToDto(actor));
+        }
+        return actorDtos;
     }
+
 
     @Override
     public boolean existsByFirstNameAndLastName(String firstName, String lastName) {

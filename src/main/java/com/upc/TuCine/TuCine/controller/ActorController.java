@@ -28,8 +28,8 @@ public class ActorController {
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/actors")
-    public ResponseEntity<List<Actor>> getAllActors() {
-        return new ResponseEntity<List<Actor>>(actorService.getAllActors(), HttpStatus.OK);
+    public ResponseEntity<List<ActorDto>> getAllActors() {
+        return new ResponseEntity<List<ActorDto>>(actorService.getAllActors(), HttpStatus.OK);
     }
 
     //URL: http://localhost:8080/api/TuCine/v1/actors
