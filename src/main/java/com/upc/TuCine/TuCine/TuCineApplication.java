@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@OpenAPIDefinition(
+/*@OpenAPIDefinition(
 		info = @Info(
 				title = "API TuCine",
 				version = "1.0",
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Bean;
 						url = "http://www.apache.org/licenses/LICENSE-2.0.html"
 				)
 		)
-)
+)*/
 
 public class TuCineApplication {
 
