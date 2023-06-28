@@ -2,11 +2,13 @@ package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.BusinessDto;
 import com.upc.TuCine.TuCine.dto.BusinessTypeDto;
+import com.upc.TuCine.TuCine.dto.ShowtimeDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.*;
 import com.upc.TuCine.TuCine.repository.BusinessRepository;
 import com.upc.TuCine.TuCine.repository.BusinessTypeRepository;
 import com.upc.TuCine.TuCine.repository.OwnerRepository;
+import com.upc.TuCine.TuCine.repository.ShowtimeRepository;
 import com.upc.TuCine.TuCine.service.BusinessService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Autowired
     private BusinessTypeRepository businessTypeRepository;
+
+    @Autowired
+    private ShowtimeRepository showtimeRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -91,6 +96,18 @@ public class BusinessServiceImpl implements BusinessService {
         }
         BusinessType businessType = business.getBusinessType();
         return convertBusinessTypeToDto(businessType);
+    }
+
+    @Override
+    public List<ShowtimeDto> getAllShowtimesByBusinessId(Integer id) {
+        Business business = businessRepository.findById(id).orElse(null);
+        if (business == null) {
+            return null;
+        }
+        List<ShowtimeDto> showtimes = showtimeRepository.findAllByFilm_id(business.getId()).stream()
+                .map(showtime -> modelMapper.map(showtime, ShowtimeDto.class))
+                .collect(Collectors.toList());
+        return showtimes;
     }
 
 

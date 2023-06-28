@@ -77,6 +77,4 @@ public class ShowtimeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
 }
