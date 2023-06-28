@@ -104,7 +104,7 @@ public class BusinessServiceImpl implements BusinessService {
         if (business == null) {
             return null;
         }
-        List<ShowtimeDto> showtimes = showtimeRepository.findAllByFilm_id(business.getId()).stream()
+        List<ShowtimeDto> showtimes = showtimeRepository.findAllByBusiness_id(business.getId()).stream()
                 .map(showtime -> modelMapper.map(showtime, ShowtimeDto.class))
                 .collect(Collectors.toList());
         return showtimes;

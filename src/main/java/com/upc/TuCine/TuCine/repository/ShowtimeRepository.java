@@ -9,5 +9,6 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, Integer> {
 
     //Found all showtimes by film_id
     List<Showtime> findAllByFilm_id(Integer film_id);
+    List<Showtime> findAllByBusiness_id(Integer business_id);
 
 }
