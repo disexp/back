@@ -12,7 +12,5 @@ public interface ContentRatingService {
 
     ContentRatingDto getContentRatingById(Integer id);
 
-    boolean existsContentRatingByName(String name);
-
 
 }

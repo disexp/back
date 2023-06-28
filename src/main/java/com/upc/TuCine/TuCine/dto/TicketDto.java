@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class TicketDto {
     private Integer id;
-    private Customer customer;
-    private Showtime showtime;
     private Integer numberSeats;
     private Float totalPrice;
+    private Customer customer;
+    private Showtime showtime;
 }

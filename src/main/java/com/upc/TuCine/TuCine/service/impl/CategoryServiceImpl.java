@@ -1,6 +1,7 @@
 package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.CategoryDto;
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Category;
 import com.upc.TuCine.TuCine.repository.CategoryRepository;
 import com.upc.TuCine.TuCine.service.CategoryService;
@@ -43,13 +44,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
+        validateCategory(categoryDto);
+        existsCategoryByName(categoryDto.getName());
+
         Category category = DtoToEntity(categoryDto);
         return EntityToDto(categoryRepository.save(category));
     }
 
-    @Override
-    public boolean existsCategoryByName(String name) {
-        return categoryRepository.existsByName(name);
+    private void validateCategory(CategoryDto category) {
+        if (category.getName() == null || category.getName().isEmpty()) {
+            throw new ValidationException("El nombre de la categoria es obligatorio");
+        }
+    }
+
+    private void existsCategoryByName(String name) {
+        if (categoryRepository.existsByName(name)) {
+            throw new ValidationException("No se puede registrar la categoria, ya existe una con ese nombre");
+        }
     }
 
 

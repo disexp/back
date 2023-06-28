@@ -46,24 +46,7 @@ public class ContentRatingController {
     @Transactional
     @PostMapping("/contentRatings")
     public ResponseEntity<ContentRatingDto> createContentRating(@RequestBody ContentRatingDto contentRatingDto){
-        validateContentRating(contentRatingDto);
-        existsContentRatingByName(contentRatingDto.getName());
         return new ResponseEntity<ContentRatingDto>(contentRatingService.createContentRating(contentRatingDto), HttpStatus.CREATED);
-    }
-
-    void validateContentRating(ContentRatingDto contentRating) {
-        if (contentRating.getName() == null || contentRating.getName().isEmpty()) {
-            throw new ValidationException("El nombre de la clasificacion es requerido");
-        }
-        if(contentRating.getDescription() == null || contentRating.getDescription().isEmpty()){
-            throw new ValidationException("La descripcion de la clasificacion es requerida");
-        }
-    }
-
-    void existsContentRatingByName(String name) {
-        if (contentRatingService.existsContentRatingByName(name)) {
-            throw new ValidationException("No se puede registrar la clasificación, ya existe uno con ese nombre");
-        }
     }
     
 

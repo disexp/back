@@ -9,8 +9,4 @@ public interface OwnerService {
     List<OwnerDto> getAllOwners();
 
     OwnerDto createOwner(OwnerDto ownerDto);
-
-    boolean existsOwnerByAccountNumber(String accountNumber);
-
-    boolean existsPersonById(Integer id);
 }

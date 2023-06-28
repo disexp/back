@@ -25,7 +25,7 @@ public class Owner {
     @OneToOne
     @JoinColumn(name = "Person_id", nullable = false, foreignKey = @ForeignKey(name = "FK_OWNER_PERSON"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Person Person_id;
+    private Person person;
 
 
 }

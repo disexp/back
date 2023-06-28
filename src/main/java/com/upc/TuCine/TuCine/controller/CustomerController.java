@@ -35,14 +35,7 @@ public class CustomerController {
     @Transactional
     @PostMapping("/customers")
     public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerDto customerDto){
-        validateCustomer(customerDto);
         return new ResponseEntity<CustomerDto>(customerService.createCustomer(customerDto), HttpStatus.CREATED);
-    }
-
-    private void validateCustomer(CustomerDto customer) {
-        if (customer.getPerson() == null) {
-            throw new ValidationException("La persona es obligatoria");
-        }
     }
 
 

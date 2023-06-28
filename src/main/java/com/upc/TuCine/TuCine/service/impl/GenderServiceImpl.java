@@ -1,6 +1,7 @@
 package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.GenderDto;
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Gender;
 import com.upc.TuCine.TuCine.repository.GenderRepository;
 import com.upc.TuCine.TuCine.service.GenderService;
@@ -41,11 +42,21 @@ public class GenderServiceImpl implements GenderService {
     }
     @Override
     public GenderDto createGender(GenderDto genderDto) {
+        genderValidate(genderDto);
+        existsGenderByName(genderDto.getName());
+
        Gender gender = DtoToEntity(genderDto);
        return EntityToDto(genderRepository.save(gender));
     }
-    @Override
-    public boolean existsGenderByName(String name) {
-        return genderRepository.existsGenderByName(name);
+    void genderValidate(GenderDto gender){
+        if(gender.getName()==null || gender.getName().isEmpty()){
+            throw new ValidationException("El nombre es obligatorio");
+        }
+    }
+
+    void existsGenderByName(String name) {
+        if (genderRepository.existsGenderByName(name)) {
+            throw new ValidationException("No se puede registrar el genero, ya existe uno con ese nombre");
+        }
     }
 }

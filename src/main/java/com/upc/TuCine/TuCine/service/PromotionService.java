@@ -13,6 +13,4 @@ public interface PromotionService {
 
     PromotionDto deletePromotion(Integer id);
 
-    void existsPromotionByTitle(String title);
-
 }

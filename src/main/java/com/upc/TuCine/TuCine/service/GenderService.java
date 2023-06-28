@@ -10,6 +10,4 @@ public interface GenderService {
 
     GenderDto createGender(GenderDto genderDto);
 
-    boolean existsGenderByName(String name);
-
 }

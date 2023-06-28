@@ -1,6 +1,7 @@
 package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.ContentRatingDto;
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.ContentRating;
 import com.upc.TuCine.TuCine.repository.ContentRatingRepository;
 import com.upc.TuCine.TuCine.service.ContentRatingService;
@@ -41,6 +42,9 @@ public class ContentRatingServiceImpl implements ContentRatingService {
 
     @Override
     public ContentRatingDto createContentRating(ContentRatingDto contentRatingDto) {
+        validateContentRating(contentRatingDto);
+        existsContentRatingByName(contentRatingDto.getName());
+
         ContentRating contentRating = DtoToEntity(contentRatingDto);
         return EntityToDto(contentRatingRepository.save(contentRating));
     }
@@ -54,8 +58,18 @@ public class ContentRatingServiceImpl implements ContentRatingService {
         return EntityToDto(contentRating);
     }
 
-    @Override
-    public boolean existsContentRatingByName(String name) {
-        return contentRatingRepository.existsContentRatingByName(name);
+    void validateContentRating(ContentRatingDto contentRating) {
+        if (contentRating.getName() == null || contentRating.getName().isEmpty()) {
+            throw new ValidationException("El nombre de la clasificacion es requerido");
+        }
+        if(contentRating.getDescription() == null || contentRating.getDescription().isEmpty()){
+            throw new ValidationException("La descripcion de la clasificacion es requerida");
+        }
+    }
+
+    void existsContentRatingByName(String name) {
+        if (contentRatingRepository.existsContentRatingByName(name)) {
+            throw new ValidationException("No se puede registrar la clasificación, ya existe uno con ese nombre");
+        }
     }
 }

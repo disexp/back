@@ -26,7 +26,5 @@ public interface FilmService {
 
     void addCategoryToFilm(Integer idFilm, Integer idCategory);
 
-    boolean existsFilmByTitle(String title);
-
 
 }

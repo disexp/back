@@ -36,31 +36,9 @@ public class OwnerController {
     @Transactional
     @PostMapping("/owners")
     public ResponseEntity<OwnerDto> createOwner(@RequestBody OwnerDto ownerDto){
-        validateOwner(ownerDto);
-        existsPersonById(ownerDto.getPerson().getId());
-        existsOwnerByAccountNumber(ownerDto.getBankAccount());
         return new ResponseEntity<OwnerDto>(ownerService.createOwner(ownerDto), HttpStatus.CREATED);
     }
 
-    void validateOwner(OwnerDto owner) {
-        if (owner.getPerson() == null) {
-            throw new ValidationException("El person es obligatorio");
-        }
-        if(owner.getBankAccount()==null || owner.getBankAccount().isEmpty()){
-            throw new ValidationException("La cuenta bancaria es obligatoria");
-        }
-    }
 
-    void existsOwnerByAccountNumber(String accountNumber) {
-        if (ownerService.existsOwnerByAccountNumber(accountNumber)) {
-            throw new ValidationException("Ya existe un owner con el numero de cuenta: " + accountNumber);
-        }
-    }
-
-    void existsPersonById(Integer id) {
-        if (!ownerService.existsPersonById(id)) {
-            throw new ValidationException("No existe el person con ID: " + id+" para crear el owner");
-        }
-    }
 
 }

@@ -1,6 +1,9 @@
 package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.TicketDto;
+import com.upc.TuCine.TuCine.exception.ValidationException;
+import com.upc.TuCine.TuCine.model.Customer;
+import com.upc.TuCine.TuCine.model.Promotion;
 import com.upc.TuCine.TuCine.model.Showtime;
 import com.upc.TuCine.TuCine.model.Ticket;
 import com.upc.TuCine.TuCine.repository.CustomerRepository;
@@ -50,9 +53,16 @@ public class TicketServiceImpl implements TicketService {
     }
     @Override
     public TicketDto createTicket(TicketDto ticketDto) {
+
         validateTicket(ticketDto);
         existsCustomerById(ticketDto.getCustomer().getId());
         existsShowtimeById(ticketDto.getShowtime().getId());
+
+        Customer customer = customerRepository.findById(ticketDto.getCustomer().getId()).orElse(null);
+        ticketDto.setCustomer(customer);
+
+        Showtime showtime = showtimeRepository.findById(ticketDto.getShowtime().getId()).orElse(null);
+        ticketDto.setShowtime(showtime);
 
         Ticket ticket = DtoToEntity(ticketDto);
         Ticket createdTicket = ticketRepository.save(ticket);
@@ -65,13 +75,22 @@ public class TicketServiceImpl implements TicketService {
         if (ticketToUpdate == null) {
             return null; // O lanzar una excepción si lo prefieres
         }
+
         validateTicket(ticketDto);
         existsCustomerById(ticketDto.getCustomer().getId());
         existsShowtimeById(ticketDto.getShowtime().getId());
 
+
+        Customer customer = customerRepository.findById(ticketDto.getCustomer().getId()).orElse(null);
+        ticketDto.setCustomer(customer);
+
+        Showtime showtime = showtimeRepository.findById(ticketDto.getShowtime().getId()).orElse(null);
+        ticketDto.setShowtime(showtime);
+
+
         // Actualizar los campos del ticket existente
-        ticketToUpdate.setCustomer_id(ticketDto.getCustomer());
-        ticketToUpdate.setShowtime_id(ticketDto.getShowtime());
+        ticketToUpdate.setCustomer(ticketDto.getCustomer());
+        ticketToUpdate.setShowtime(ticketDto.getShowtime());
         ticketToUpdate.setNumberSeats(ticketDto.getNumberSeats());
         ticketToUpdate.setTotalPrice(ticketDto.getTotalPrice());
 
@@ -95,28 +114,28 @@ public class TicketServiceImpl implements TicketService {
 
     private void validateTicket(TicketDto ticket) {
         if (ticket.getCustomer() == null) {
-            throw new RuntimeException("Customer id is required");
+            throw new ValidationException("Customer id es requerido");
         }
         if (ticket.getShowtime() == null) {
-            throw new RuntimeException("Showtime id is required");
+            throw new ValidationException("Showtime id es requerido");
         }
         if (ticket.getNumberSeats() == null || ticket.getNumberSeats() == 0) {
-            throw new RuntimeException("Number of seats is required and must be greater than 0");
+            throw new ValidationException("El numero de asientos debe ser mayor a 0");
         }
-        if (ticket.getTotalPrice() == null || ticket.getTotalPrice() == 0) {
-            throw new RuntimeException("Total price is required and must be greater than 0");
+        if (ticket.getTotalPrice() == null || ticket.getTotalPrice() <= 0) {
+            throw new ValidationException("El precio total es requerido y debe ser mayor a 0");
         }
     }
 
     private void existsCustomerById(Integer id) {
         if (!customerRepository.existsById(id)) {
-            throw new RuntimeException("Customer id not found");
+            throw new ValidationException("Customer id not found");
         }
     }
 
     private void existsShowtimeById(Integer id) {
         if (!showtimeRepository.existsById(id)) {
-            throw new RuntimeException("Showtime id not found");
+            throw new ValidationException("Showtime id not found");
         }
     }
 }

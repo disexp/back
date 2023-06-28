@@ -2,6 +2,7 @@ package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.*;
 import com.upc.TuCine.TuCine.exception.ResourceNotFoundException;
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.*;
 import com.upc.TuCine.TuCine.repository.*;
 import com.upc.TuCine.TuCine.service.FilmService;
@@ -59,8 +60,13 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public FilmDto createFilm(FilmDto filmDto) {
-        ContentRating contentRating = contentRatingRepository.findById(filmDto.getContentRating_id().getId()).orElse(null);
-        filmDto.setContentRating_id(contentRating);
+
+        validateFilm(filmDto);
+        existsFilmByTitle(filmDto.getTitle());
+
+        ContentRating contentRating = contentRatingRepository.findById(filmDto.getContentRating().getId()).orElse(null);
+        filmDto.setContentRating(contentRating);
+
         Film film = DtoToEntity(filmDto);
         return EntityToDto(filmRepository.save(film));
     }
@@ -71,7 +77,7 @@ public class FilmServiceImpl implements FilmService {
         if (film == null) {
             return null;
         }
-        ContentRating contentRating = film.getContentRating_id();
+        ContentRating contentRating = film.getContentRating();
         return modelMapper.map(contentRating, ContentRatingDto.class);
     }
 
@@ -129,10 +135,28 @@ public class FilmServiceImpl implements FilmService {
         return showtimes;
     }
 
+    void validateFilm(FilmDto film) {
 
+        if(film.getTitle() == null || film.getTitle().isEmpty()) {
+            throw new ValidationException("El nombre de la película no puede estar vacío");
+        }
+        if(film.getDuration() == null || film.getDuration() <= 0) {
+            throw new ValidationException("La duración de la película no puede ser menor o igual a 0");
+        }
+        if(film.getSynopsis() == null || film.getSynopsis().isEmpty()) {
+            throw new ValidationException("La sinopsis de la película no puede estar vacía");
+        }
+        if(film.getYear() == null || film.getYear() <= 0) {
+            throw new ValidationException("El año de la película no puede estar vacío");
+        }
+        if(film.getContentRating() == null) {
+            throw new ValidationException("La clasificación de la película no puede estar vacío");
+        }
 
-    @Override
-    public boolean existsFilmByTitle(String title) {
-        return filmRepository.existsFilmByTitle(title);
+    }
+    void existsFilmByTitle(String title) {
+        if (filmRepository.existsFilmByTitle(title)) {
+            throw new ValidationException("No se puede agregar la película, puesto que una con su mismo titulo ya existe");
+        }
     }
 }

@@ -61,69 +61,9 @@ public class BusinessController {
     @Transactional
     @PostMapping("/businesses")
     public ResponseEntity<BusinessDto> createBusiness(@RequestBody BusinessDto businessDto){
-        validateBusiness(businessDto);
-        existsByBusinessName(businessDto.getName());
-        existsByBusinessRuc(businessDto.getRuc());
-        existsByBusinessEmail(businessDto.getEmail());
         return new ResponseEntity<>(businessService.createBusiness(businessDto), HttpStatus.CREATED);
     }
 
-    public void validateBusiness(BusinessDto business) {
-        if (business.getName() == null || business.getName().isEmpty()) {
-            throw new ValidationException("El nombre de negocio es obligatorio");
-        }
-        if(business.getSocialReason()==null || business.getSocialReason().isEmpty()){
-            throw new ValidationException("La razón social es obligatoria");
-        }
-        if (business.getRuc() == null || business.getRuc().isEmpty()) {
-            throw new ValidationException("El RUC es obligatorio");
-        }
-        if (business.getEmail() == null || business.getEmail().isEmpty()) {
-            throw new ValidationException("El correo es obligatorio");
-        }
-        if (business.getAddress() == null || business.getAddress().isEmpty()) {
-            throw new ValidationException("La dirección es obligatoria");
-        }
-        if (business.getPhone() == null || business.getPhone().isEmpty()) {
-            throw new ValidationException("El teléfono es obligatorio");
-        }
-        if(business.getImageLogo()==null || business.getImageLogo().isEmpty()){
-            throw new ValidationException("La imagen es obligatoria");
-        }
-        if(business.getImageBanner()==null || business.getImageBanner().isEmpty()){
-            throw new ValidationException("La imagen es obligatoria");
-        }
-        if(business.getDescription()==null || business.getDescription().isEmpty()){
-            throw new ValidationException("La descripción es obligatoria");
-        }
-        if(business.getDateAttention()==null || business.getDateAttention().isEmpty()){
-            throw new ValidationException("La fecha de atención es obligatoria");
-        }
-        if(business.getReferenceAddress()==null || business.getReferenceAddress().isEmpty()){
-            throw new ValidationException("La referencia de la dirección es obligatoria");
-        }
-        if(business.getBusinessType()==null){
-            throw new ValidationException("El tipo de negocio es obligatorio");
-        }
-        if(business.getOwner()==null){
-            throw new ValidationException("El dueño es obligatorio");
-        }
-    }
 
-    public void existsByBusinessName(String businessName) {
-        if (businessService.existsByBusinessName(businessName)) {
-            throw new ValidationException("El nombre de negocio ya existe");
-        }
-    }
-    public void existsByBusinessRuc(String businessRuc) {
-        if (businessService.existsByBusinessRuc(businessRuc)) {
-            throw new ValidationException("Un Business con ese RUC ya existe");
-        }
-    }
-    public void existsByBusinessEmail(String businessEmail) {
-        if (businessService.existsByBusinessEmail(businessEmail)) {
-            throw new ValidationException("Un Business con ese correo ya existe");
-        }
-    }
 
 }

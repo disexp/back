@@ -8,6 +8,4 @@ public interface CategoryService {
 
     List<CategoryDto> getAllCategories();
     CategoryDto createCategory(CategoryDto categoryDto);
-
-    boolean existsCategoryByName(String name);
 }

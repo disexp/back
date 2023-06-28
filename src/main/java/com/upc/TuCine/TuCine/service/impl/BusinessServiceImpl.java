@@ -2,9 +2,11 @@ package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.BusinessDto;
 import com.upc.TuCine.TuCine.dto.BusinessTypeDto;
-import com.upc.TuCine.TuCine.model.Business;
-import com.upc.TuCine.TuCine.model.BusinessType;
+import com.upc.TuCine.TuCine.exception.ValidationException;
+import com.upc.TuCine.TuCine.model.*;
 import com.upc.TuCine.TuCine.repository.BusinessRepository;
+import com.upc.TuCine.TuCine.repository.BusinessTypeRepository;
+import com.upc.TuCine.TuCine.repository.OwnerRepository;
 import com.upc.TuCine.TuCine.service.BusinessService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,12 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Autowired
     private BusinessRepository businessRepository;
+
+    @Autowired
+    private OwnerRepository ownerRepository;
+
+    @Autowired
+    private BusinessTypeRepository businessTypeRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -40,6 +48,19 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     public BusinessDto createBusiness(BusinessDto businessDto) {
+
+        validateBusiness(businessDto);
+        existsByBusinessName(businessDto.getName());
+        existsByBusinessRuc(businessDto.getRuc());
+        existsByBusinessEmail(businessDto.getEmail());
+
+
+        Owner owner = ownerRepository.findById(businessDto.getOwner().getId()).orElse(null);
+        businessDto.setOwner(owner);
+
+        BusinessType businessType = businessTypeRepository.findById(businessDto.getBusinessType().getId()).orElse(null);
+        businessDto.setBusinessType(businessType);
+
         Business business = DtoToEntity(businessDto);
         return EntityToDto(businessRepository.save(business));
     }
@@ -73,18 +94,61 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
 
-    @Override
-    public boolean existsByBusinessName(String name) {
-        return businessRepository.existsBusinessByName(name);
+    public void validateBusiness(BusinessDto business) {
+        if (business.getName() == null || business.getName().isEmpty()) {
+            throw new ValidationException("El nombre de negocio es obligatorio");
+        }
+        if(business.getSocialReason()==null || business.getSocialReason().isEmpty()){
+            throw new ValidationException("La razón social es obligatoria");
+        }
+        if (business.getRuc() == null || business.getRuc().isEmpty()) {
+            throw new ValidationException("El RUC es obligatorio");
+        }
+        if (business.getEmail() == null || business.getEmail().isEmpty()) {
+            throw new ValidationException("El correo es obligatorio");
+        }
+        if (business.getAddress() == null || business.getAddress().isEmpty()) {
+            throw new ValidationException("La dirección es obligatoria");
+        }
+        if (business.getPhone() == null || business.getPhone().isEmpty()) {
+            throw new ValidationException("El teléfono es obligatorio");
+        }
+        if(business.getImageLogo()==null || business.getImageLogo().isEmpty()){
+            throw new ValidationException("La imagen es obligatoria");
+        }
+        if(business.getImageBanner()==null || business.getImageBanner().isEmpty()){
+            throw new ValidationException("La imagen es obligatoria");
+        }
+        if(business.getDescription()==null || business.getDescription().isEmpty()){
+            throw new ValidationException("La descripción es obligatoria");
+        }
+        if(business.getDateAttention()==null || business.getDateAttention().isEmpty()){
+            throw new ValidationException("La fecha de atención es obligatoria");
+        }
+        if(business.getReferenceAddress()==null || business.getReferenceAddress().isEmpty()){
+            throw new ValidationException("La referencia de la dirección es obligatoria");
+        }
+        if(business.getBusinessType()==null){
+            throw new ValidationException("El tipo de negocio es obligatorio");
+        }
+        if(business.getOwner()==null){
+            throw new ValidationException("El dueño es obligatorio");
+        }
     }
 
-    @Override
-    public boolean existsByBusinessRuc(String ruc) {
-        return businessRepository.existsBusinessByRuc(ruc);
+    public void existsByBusinessName(String businessName) {
+        if (businessRepository.existsBusinessByName(businessName)) {
+            throw new ValidationException("El nombre de negocio ya existe");
+        }
     }
-
-    @Override
-    public boolean existsByBusinessEmail(String email) {
-        return businessRepository.existsBusinessByEmail(email);
+    public void existsByBusinessRuc(String businessRuc) {
+        if (businessRepository.existsBusinessByRuc(businessRuc)) {
+            throw new ValidationException("Un Business con ese RUC ya existe");
+        }
+    }
+    public void existsByBusinessEmail(String businessEmail) {
+        if (businessRepository.existsBusinessByEmail(businessEmail)) {
+            throw new ValidationException("Un Business con ese correo ya existe");
+        }
     }
 }

@@ -49,9 +49,6 @@ public class FilmController {
     @Transactional
     @PostMapping("/films")
     public ResponseEntity<FilmDto> createFilm(@RequestBody FilmDto filmDto){
-
-        validateFilm(filmDto);
-        existsFilmByTitle(filmDto.getTitle());
         FilmDto createdFilmDto= filmService.createFilm(filmDto);
         return new ResponseEntity<>(createdFilmDto, HttpStatus.CREATED);
     }
@@ -127,27 +124,6 @@ public class FilmController {
     }
 
 
-    void validateFilm(FilmDto film) {
-
-        if(film.getTitle() == null || film.getTitle().isEmpty()) {
-            throw new ValidationException("El nombre de la película no puede estar vacío");
-        }
-        if(film.getDuration() == null || film.getDuration() <= 0) {
-            throw new ValidationException("La duración de la película no puede ser menor o igual a 0");
-        }
-        if(film.getSynopsis() == null || film.getSynopsis().isEmpty()) {
-            throw new ValidationException("La sinopsis de la película no puede estar vacía");
-        }
-        if(film.getYear() == null || film.getYear() <= 0) {
-            throw new ValidationException("El año de la película no puede estar vacío");
-        }
-
-    }
-    void existsFilmByTitle(String title) {
-        if (filmService.existsFilmByTitle(title)) {
-            throw new ValidationException("No se puede agregar la película, puesto que una con su mismo titulo ya existe");
-        }
-    }
 
 
 }

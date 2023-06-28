@@ -17,7 +17,7 @@ public class FilmDto {
     private String poster;
     private String trailer;
     private Integer duration;
-    private ContentRating contentRating_id;
+    private ContentRating contentRating;
     private List<Actor> actors;
     private List<Category> categories;
 }

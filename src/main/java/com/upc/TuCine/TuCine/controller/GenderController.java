@@ -34,20 +34,6 @@ public class GenderController {
     @Transactional
     @PostMapping("/genders")
     public ResponseEntity<GenderDto> createGender(@RequestBody GenderDto genderDto){
-        genderValidate(genderDto);
-        existsGenderByName(genderDto.getName());
         return new ResponseEntity<GenderDto>(genderService.createGender(genderDto), HttpStatus.CREATED);
-    }
-
-    void genderValidate(GenderDto gender){
-        if(gender.getName()==null || gender.getName().isEmpty()){
-            throw new ValidationException("El nombre es obligatorio");
-        }
-    }
-
-    void existsGenderByName(String name) {
-        if (genderService.existsGenderByName(name)) {
-            throw new ValidationException("No se puede registrar el genero, ya existe uno con ese nombre");
-        }
     }
 }

@@ -19,20 +19,19 @@ public class Ticket {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "Customer_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TICKET_PERSON"))
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Customer Customer_id;
-
-    @ManyToOne
-    @JoinColumn(name = "Showtime_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TICKET_SHOWTIME"))
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Showtime Showtime_id;
-
     @Column(name = "number_seats", nullable = false)
     private Integer numberSeats;
 
     @Column(name = "total_price", nullable = false)
     private Float totalPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "Customer_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TICKET_PERSON"))
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "Showtime_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TICKET_SHOWTIME"))
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Showtime showtime;
 }

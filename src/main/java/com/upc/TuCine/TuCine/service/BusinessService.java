@@ -16,10 +16,5 @@ public interface BusinessService {
 
     BusinessTypeDto getBusinessTypeByBusinessId(Integer id);
 
-    boolean existsByBusinessName(String name);
-
-    boolean existsByBusinessRuc(String ruc);
-
-    boolean existsByBusinessEmail(String email);
 
 }

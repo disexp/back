@@ -38,21 +38,9 @@ public class CategoryController {
     @Transactional
     @PostMapping("/categories")
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
-        existsCategoryByName(categoryDto.getName());
-        validateCategory(categoryDto);
         return new ResponseEntity<>(categoryService.createCategory(categoryDto), HttpStatus.CREATED);
     }
 
-    private void validateCategory(CategoryDto category) {
-        if (category.getName() == null || category.getName().isEmpty()) {
-            throw new ValidationException("El nombre de la categoria es obligatorio");
-        }
-    }
 
-    private void existsCategoryByName(String name) {
-        if (categoryService.existsCategoryByName(name)) {
-            throw new ValidationException("No se puede registrar la categoria, ya existe una con ese nombre");
-        }
-    }
 
 }

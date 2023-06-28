@@ -43,6 +43,6 @@ public class Promotion {
     @ManyToOne
     @JoinColumn(name = "business_id", nullable = false, foreignKey = @ForeignKey(name = "FK_PROMOTION_BUSINESS"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Business business_id;
+    private Business business;
 
 }

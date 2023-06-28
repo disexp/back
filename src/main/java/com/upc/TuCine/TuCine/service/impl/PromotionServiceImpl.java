@@ -1,8 +1,11 @@
 package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.PromotionDto;
+import com.upc.TuCine.TuCine.exception.ValidationException;
+import com.upc.TuCine.TuCine.model.Business;
 import com.upc.TuCine.TuCine.model.Person;
 import com.upc.TuCine.TuCine.model.Promotion;
+import com.upc.TuCine.TuCine.repository.BusinessRepository;
 import com.upc.TuCine.TuCine.repository.PromotionRepository;
 import com.upc.TuCine.TuCine.service.PromotionService;
 import org.modelmapper.ModelMapper;
@@ -17,6 +20,9 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Autowired
     private PromotionRepository promotionRepository;
+
+    @Autowired
+    private BusinessRepository businessRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -43,8 +49,18 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionDto createPromotion(PromotionDto promotionDto) {
+
         validatePromotion(promotionDto);
         existsPromotionByTitle(promotionDto.getTitle());
+
+        Business business;
+        try {
+            business = businessRepository.findById(promotionDto.getBusiness().getId()).orElse(null);
+        } catch (Exception e) {
+            business= null;
+        }
+        promotionDto.setBusiness(business);
+
         Promotion promotion = DtoToEntity(promotionDto);
         return EntityToDto(promotionRepository.save(promotion));
     }
@@ -81,29 +97,31 @@ public class PromotionServiceImpl implements PromotionService {
     }
     private void validatePromotion(PromotionDto promotion) {
         if (promotion.getTitle() == null || promotion.getTitle().isEmpty()) {
-            throw new RuntimeException("El titulo no puede ser nulo o estar vacío");
+            throw new ValidationException("El titulo no puede ser nulo o estar vacío");
         }
         if (promotion.getDescription() == null || promotion.getDescription().isEmpty()) {
-            throw new RuntimeException("La descripción no puede ser nula o estar vacía");
+            throw new ValidationException("La descripción no puede ser nula o estar vacía");
         }
         if (promotion.getStartDate() == null) {
-            throw new RuntimeException("La fecha de inicio no puede ser nula");
+            throw new ValidationException("La fecha de inicio no puede ser nula");
         }
         if (promotion.getEndDate() == null) {
-            throw new RuntimeException("La fecha de fin no puede ser nula");
+            throw new ValidationException("La fecha de fin no puede ser nula");
         }
         if (promotion.getStartDate().isAfter(promotion.getEndDate())) {
-            throw new RuntimeException("La fecha de inicio no puede ser mayor a la fecha de fin");
+            throw new ValidationException("La fecha de inicio no puede ser mayor a la fecha de fin");
         }
         if(promotion.getDiscount() == null){
-            throw new RuntimeException("El descuento no puede ser nulo");
+            throw new ValidationException("El descuento no puede ser nulo");
+        }
+        if(promotion.getBusiness()==null){
+            throw new ValidationException("El negocio no puede ser nulo");
         }
     }
 
-    @Override
     public void existsPromotionByTitle(String title) {
         if (promotionRepository.existsPromotionByTitle(title)) {
-            throw new RuntimeException("Ya existe una promoción con el título " + title);
+            throw new ValidationException("Ya existe una promoción con el título " + title);
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.CustomerDto;
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Category;
 import com.upc.TuCine.TuCine.model.Customer;
+import com.upc.TuCine.TuCine.model.Person;
 import com.upc.TuCine.TuCine.repository.CustomerRepository;
+import com.upc.TuCine.TuCine.repository.PersonRepository;
 import com.upc.TuCine.TuCine.service.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -43,7 +49,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto createCustomer(CustomerDto customerDto) {
+
+        validateCustomer(customerDto);
+
+        Person person = personRepository.findById(customerDto.getPerson().getId()).orElse(null);
+        customerDto.setPerson(person);
+
         Customer customer = DtoToEntity(customerDto);
         return EntityToDto(customerRepository.save(customer));
+    }
+
+    private void validateCustomer(CustomerDto customer) {
+        if (customer.getPerson() == null) {
+            throw new ValidationException("La persona es obligatoria");
+        }
     }
 }
