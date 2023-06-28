@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "https://backend-tucine-production.up.railway.app")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/TuCine/v1")
 public class FilmController {
