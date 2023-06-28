@@ -2,6 +2,7 @@ package com.upc.TuCine.TuCine.controller;
 
 import com.upc.TuCine.TuCine.dto.BusinessDto;
 import com.upc.TuCine.TuCine.dto.BusinessTypeDto;
+import com.upc.TuCine.TuCine.dto.ShowtimeDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.service.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,18 @@ public class BusinessController {
         return new ResponseEntity<>(businessTypeDto, HttpStatus.OK);
     }
 
+    //Get all Showtimes by Business Id
+    //URL: http://localhost:8080/api/TuCine/v1/businesses/{id}/showtimes
+    //Method: GET
+    @Transactional(readOnly = true)
+    @GetMapping("/businesses/{id}/showtimes")
+    public ResponseEntity<List<ShowtimeDto>> getAllShowtimesByBusinessId(@PathVariable("id") Integer id) {
+        List<ShowtimeDto> showtimeDtoList = businessService.getAllShowtimesByBusinessId(id);
+        if (showtimeDtoList == null) {
+            return ResponseEntity.notFound().build(); // Manejar casos en los que no se encuentre el business
+        }
+        return new ResponseEntity<>(showtimeDtoList, HttpStatus.OK);
+    }
 
     //URL: http://localhost:8080/api/TuCine/v1/businesses
     //Method: POST
