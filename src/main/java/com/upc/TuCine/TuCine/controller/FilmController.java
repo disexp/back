@@ -3,6 +3,7 @@ package com.upc.TuCine.TuCine.controller;
 import com.upc.TuCine.TuCine.dto.*;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.service.FilmService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/TuCine/v1")
 public class FilmController {
 
@@ -23,10 +23,12 @@ public class FilmController {
         this.filmService = filmService;
     }
 
+
     //URL: http://localhost:8080/api/TuCine/v1/films
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/films")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<List<FilmDto>> getAllFilms() {
         return new ResponseEntity<>(filmService.getAllFilms(), HttpStatus.OK);
     }
