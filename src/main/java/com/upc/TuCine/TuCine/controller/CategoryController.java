@@ -2,6 +2,7 @@ package com.upc.TuCine.TuCine.controller;
 
 
 import com.upc.TuCine.TuCine.dto.CategoryDto;
+import com.upc.TuCine.TuCine.dto.receive.CategoryReceiveDto;
 import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class CategoryController {
     //Method: POST
     @Transactional
     @PostMapping("/categories")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
-        return new ResponseEntity<>(categoryService.createCategory(categoryDto), HttpStatus.CREATED);
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryReceiveDto categoryReceiveDto){
+        return new ResponseEntity<>(categoryService.createCategory(categoryReceiveDto), HttpStatus.CREATED);
     }
 
 
