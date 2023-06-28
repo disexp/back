@@ -1,5 +1,6 @@
 package com.upc.TuCine.TuCine.config;
 
+/*
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -24,3 +25,4 @@ public class WebConfig implements WebMvcConfigurer {
         redirectViewControllerRegistration.setStatusCode(HttpStatusCode.valueOf(302));
     }
 }
+*/
