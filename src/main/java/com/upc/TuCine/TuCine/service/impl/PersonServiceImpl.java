@@ -3,10 +3,10 @@ package com.upc.TuCine.TuCine.service.impl;
 import com.upc.TuCine.TuCine.dto.CategoryDto;
 import com.upc.TuCine.TuCine.dto.PersonDto;
 import com.upc.TuCine.TuCine.dto.TypeUserDto;
-import com.upc.TuCine.TuCine.model.Film;
-import com.upc.TuCine.TuCine.model.Owner;
-import com.upc.TuCine.TuCine.model.Person;
+import com.upc.TuCine.TuCine.model.*;
+import com.upc.TuCine.TuCine.repository.GenderRepository;
 import com.upc.TuCine.TuCine.repository.PersonRepository;
+import com.upc.TuCine.TuCine.repository.TypeUserRepository;
 import com.upc.TuCine.TuCine.service.PersonService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,17 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     private PersonRepository personRepository;
+    @Autowired
+    private GenderRepository genderRepository;
+    @Autowired
+    private TypeUserRepository typeUserRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
     PersonServiceImpl(){
         this.modelMapper = new ModelMapper();
+
     }
 
     private PersonDto EntityToDto(Person person){
@@ -50,11 +55,18 @@ public class PersonServiceImpl implements PersonService {
          if (person == null) {
               return null;
          }
-         TypeUserDto typeUserDto = modelMapper.map(person.getTypeUser_id(), TypeUserDto.class);
+         TypeUserDto typeUserDto = modelMapper.map(person.getTypeUser(), TypeUserDto.class);
             return typeUserDto;
     }
     @Override
     public PersonDto createPerson(PersonDto personDto) {
+
+        Gender gender = genderRepository.findById(personDto.getGender().getId()).orElse(null);
+        personDto.setGender(gender);
+
+        TypeUser typeUser = typeUserRepository.findById(personDto.getTypeUser().getId()).orElse(null);
+        personDto.setTypeUser(typeUser);
+
         Person person = DtoToEntity(personDto);
         return EntityToDto(personRepository.save(person));
     }

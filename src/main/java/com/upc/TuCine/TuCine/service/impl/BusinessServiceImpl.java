@@ -68,7 +68,7 @@ public class BusinessServiceImpl implements BusinessService {
         if (business == null) {
             return null;
         }
-        BusinessType businessType = business.getBusinessType_id();
+        BusinessType businessType = business.getBusinessType();
         return convertBusinessTypeToDto(businessType);
     }
 

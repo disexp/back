@@ -41,11 +41,11 @@ public class Person {
     @ManyToOne
     @JoinColumn(name = "Gender_id",nullable = false, foreignKey = @ForeignKey(name = "FK_GENDER_ID"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Gender Gender_id;
+    private Gender gender;
 
     @ManyToOne
     @JoinColumn(name = "TypeUser_id",nullable = false, foreignKey = @ForeignKey(name = "FK_TYPEUSER_ID"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private TypeUser TypeUser_id;
+    private TypeUser typeUser;
 
 }

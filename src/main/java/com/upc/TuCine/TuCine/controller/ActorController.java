@@ -35,26 +35,8 @@ public class ActorController {
     @Transactional
     @PostMapping("/actors")
     public ResponseEntity<ActorDto> createActor(@RequestBody ActorDto actorDto){
-        existActorByFirstName(actorDto.getFirstName(),actorDto.getLastName());
-        validateActor(actorDto);
         return new ResponseEntity<ActorDto>(actorService.createActor(actorDto), HttpStatus.CREATED);
     }
 
-    void validateActor(ActorDto actor) {
-        if (actor.getFirstName() == null || actor.getFirstName().isEmpty()) {
-            throw new ValidationException("El nombre es obligatorio");
-        }
-        if (actor.getLastName() == null || actor.getLastName().isEmpty()) {
-            throw new ValidationException("El apellido es obligatorio");
-        }
-        if (actor.getBirthday() == null) {
-            throw new ValidationException("La fecha de nacimiento es obligatoria");
-        }
-    }
 
-    void existActorByFirstName(String firstName,String lastName){
-        if (actorService.existsByFirstNameAndLastName(firstName,lastName)) {
-            throw new ValidationException("Ya existe un actor con el nombre " + firstName + " " + lastName);
-        }
-    }
 }

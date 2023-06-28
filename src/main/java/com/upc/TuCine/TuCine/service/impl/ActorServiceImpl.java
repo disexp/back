@@ -1,6 +1,7 @@
 package com.upc.TuCine.TuCine.service.impl;
 
 import com.upc.TuCine.TuCine.dto.ActorDto;
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Actor;
 import com.upc.TuCine.TuCine.repository.ActorRepository;
 import com.upc.TuCine.TuCine.service.ActorService;
@@ -34,6 +35,8 @@ public class ActorServiceImpl implements ActorService {
 
     @Override
     public ActorDto createActor(ActorDto actorDto) {
+        validateActor(actorDto);
+        existActorByFirstName(actorDto.getFirstName(),actorDto.getLastName());
         Actor actor = DtoToEntity(actorDto);
         return EntityToDto(actorRepository.save(actor));
     }
@@ -48,10 +51,22 @@ public class ActorServiceImpl implements ActorService {
         return actorDtos;
     }
 
+    private void validateActor(ActorDto actor) {
+        if (actor.getFirstName() == null || actor.getFirstName().isEmpty()) {
+            throw new ValidationException("El nombre es obligatorio");
+        }
+        if (actor.getLastName() == null || actor.getLastName().isEmpty()) {
+            throw new ValidationException("El apellido es obligatorio");
+        }
+        if (actor.getBirthday() == null) {
+            throw new ValidationException("La fecha de nacimiento es obligatoria");
+        }
+    }
 
-    @Override
-    public boolean existsByFirstNameAndLastName(String firstName, String lastName) {
-        return actorRepository.existsByFirstNameAndLastName(firstName, lastName);
+    private void existActorByFirstName(String firstName,String lastName){
+        if (actorRepository.existsByFirstNameAndLastName(firstName, lastName)) {
+            throw new ValidationException("Ya existe un actor con el nombre " + firstName + " " + lastName);
+        }
     }
 
 

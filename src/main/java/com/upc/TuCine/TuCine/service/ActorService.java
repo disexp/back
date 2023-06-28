@@ -10,5 +10,4 @@ public interface ActorService {
 
     List<ActorDto> getAllActors();
 
-    boolean existsByFirstNameAndLastName(String firstName, String lastName);
 }
