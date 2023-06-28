@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "https://backend-tucine-production.up.railway.app")
 @RestController
 @RequestMapping("/api/TuCine/v1")
 public class FilmController {
@@ -28,7 +28,6 @@ public class FilmController {
     //Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/films")
-    @CrossOrigin(origins = "*")
     public ResponseEntity<List<FilmDto>> getAllFilms() {
         return new ResponseEntity<>(filmService.getAllFilms(), HttpStatus.OK);
     }
