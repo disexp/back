@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @OpenAPIDefinition(
@@ -25,7 +28,8 @@ import org.springframework.context.annotation.Bean;
 				)
 		),
 		servers = {
-				@Server(url = "https://backend-tucine-production.up.railway.app")
+				// agregar url del servidor
+				@Server(url = "")
 		}
 )
 
@@ -39,6 +43,19 @@ public class TuCineApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TuCineApplication.class, args);
+	}
+	@Configuration
+	public static class Myconfiguration{
+		@Bean
+		public WebMvcConfigurer corsConfigurer(){
+			return new WebMvcConfigurer() {
+				@Override
+				public void addCorsMappings(CorsRegistry registry) {
+					registry.addMapping("/**")
+							.allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
+				}
+			};
+		}
 	}
 
 }
