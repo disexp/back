@@ -5,6 +5,7 @@ import com.upc.TuCine.TuCine.exception.ValidationException;
 import com.upc.TuCine.TuCine.model.Business;
 import com.upc.TuCine.TuCine.model.Person;
 import com.upc.TuCine.TuCine.model.Promotion;
+import com.upc.TuCine.TuCine.model.Showtime;
 import com.upc.TuCine.TuCine.repository.BusinessRepository;
 import com.upc.TuCine.TuCine.repository.PromotionRepository;
 import com.upc.TuCine.TuCine.service.PromotionService;
@@ -12,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +29,7 @@ public class PromotionServiceImpl implements PromotionService {
     @Autowired
     private ModelMapper modelMapper;
 
-    PromotionServiceImpl(){
+    public PromotionServiceImpl(){
         this.modelMapper = new ModelMapper();
     }
 
@@ -123,5 +125,37 @@ public class PromotionServiceImpl implements PromotionService {
         if (promotionRepository.existsPromotionByTitle(title)) {
             throw new ValidationException("Ya existe una promoción con el título " + title);
         }
+    }
+
+    public boolean validatePromotionBool(Promotion promotion) {
+        if (promotion.getTitle() == null || promotion.getTitle().isEmpty()) {
+            return false;
+        }
+        if (promotion.getDescription() == null || promotion.getDescription().isEmpty()) {
+            return false;
+        }
+        if (promotion.getStartDate() == null) {
+            return false;
+        }
+        if (promotion.getEndDate() == null) {
+            return false;
+        }
+        if (promotion.getStartDate().isAfter(promotion.getEndDate())) {
+            return false;
+        }
+        if(promotion.getDiscount() == null){
+            return false;
+        }
+        return promotion.getBusiness() != null;
+    }
+
+    public boolean isPromotionValid(Showtime showtime) {
+        if (showtime.getPromotion() == null) return false;
+        LocalDate promotionStart = showtime.getPromotion().getStartDate();
+        LocalDate promotionEnd = showtime.getPromotion().getEndDate();
+        LocalDate showtimeDate = showtime.getDate();
+
+        return (showtimeDate.isEqual(promotionStart) || showtimeDate.isAfter(promotionStart) &&
+                (showtimeDate.isEqual(promotionEnd) || showtimeDate.isBefore(promotionEnd)));
     }
 }

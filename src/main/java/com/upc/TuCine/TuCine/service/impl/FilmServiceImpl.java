@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class FilmServiceImpl implements FilmService {
     @Autowired
     private ModelMapper modelMapper;
 
-    FilmServiceImpl(){
+    public FilmServiceImpl(){
         this.modelMapper = new ModelMapper();
     }
 
@@ -159,4 +160,12 @@ public class FilmServiceImpl implements FilmService {
             throw new ValidationException("No se puede agregar la película, puesto que una con su mismo titulo ya existe");
         }
     }
+
+    public boolean isFilmOld(Film film) {
+        // Obtener el año actual
+        int currentYear = LocalDate.now().getYear();
+        // Comparar el año de la película con el año actual
+        return currentYear - film.getYear() >= 2;
+    }
 }
+
