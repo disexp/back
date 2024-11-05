@@ -6,35 +6,41 @@ pipeline {
     }
 
     stages {
-        stage ('Compile Stage') {
+        stage('Compile Stage') {
             steps {
-                withMaven(maven : 'MAVEN_3_9_9') {
-                    if (isUnix()) {
-                        sh 'mvn clean compile'
-                    } else {
-                        bat 'mvn clean compile'
+                withMaven(maven: 'MAVEN_3_9_9') {
+                    script {
+                        if (isUnix()) {
+                            sh 'mvn clean compile'
+                        } else {
+                            bat 'mvn clean compile'
+                        }
                     }
                 }
             }
         }
-        stage ('Testing Stage') {
+        stage('Testing Stage') {
             steps {
-                withMaven(maven : 'MAVEN_3_9_9') {
-                    if (isUnix()) {
-                        sh 'mvn test'
-                    } else {
-                        bat 'mvn test'
+                withMaven(maven: 'MAVEN_3_9_9') {
+                    script {
+                        if (isUnix()) {
+                            sh 'mvn test'
+                        } else {
+                            bat 'mvn test'
+                        }
                     }
                 }
             }
         }
-        stage ('package Stage') {
+        stage('Package Stage') {
             steps {
-                withMaven(maven : 'MAVEN_3_9_9') {
-                    if (isUnix()) {
-                        sh 'mvn package'
-                    } else {
-                        bat 'mvn package'
+                withMaven(maven: 'MAVEN_3_9_9') {
+                    script {
+                        if (isUnix()) {
+                            sh 'mvn package'
+                        } else {
+                            bat 'mvn package'
+                        }
                     }
                 }
             }
