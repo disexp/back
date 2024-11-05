@@ -9,21 +9,33 @@ pipeline {
         stage ('Compile Stage') {
             steps {
                 withMaven(maven : 'MAVEN_3_9_9') {
-                    bat 'mvn clean compile'
+                    if (isUnix()) {
+                        sh 'mvn clean compile'
+                    } else {
+                        bat 'mvn clean compile'
+                    }
                 }
             }
         }
         stage ('Testing Stage') {
             steps {
                 withMaven(maven : 'MAVEN_3_9_9') {
-                    bat 'mvn test'
+                    if (isUnix()) {
+                        sh 'mvn test'
+                    } else {
+                        bat 'mvn test'
+                    }
                 }
             }
         }
         stage ('package Stage') {
             steps {
                 withMaven(maven : 'MAVEN_3_9_9') {
-                    bat 'mvn package'
+                    if (isUnix()) {
+                        sh 'mvn package'
+                    } else {
+                        bat 'mvn package'
+                    }
                 }
             }
         }
