@@ -21,4 +21,6 @@ public class ShowtimeDto {
     private Film film;
     private Business business;
     private Promotion promotion;
+    private Integer maxCapacity;
+    private Integer currentCapacity;
 }

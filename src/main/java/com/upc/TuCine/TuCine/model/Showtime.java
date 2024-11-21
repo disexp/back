@@ -2,6 +2,7 @@ package com.upc.TuCine.TuCine.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.upc.TuCine.TuCine.exception.ValidationException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,4 +50,17 @@ public class Showtime {
     @JoinColumn(name = "promotion_id", foreignKey = @ForeignKey(name = "FK_SHOWTIME_PROMOTION"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Promotion promotion;
+
+    @Column(name = "capacity", nullable = false)
+    private Integer maxCapacity;
+
+    @Column(name = "current_capacity", nullable = false)
+    private Integer currentCapacity;
+
+    public void addTickets(int numberOfTickets) {
+        if (this.currentCapacity + numberOfTickets > this.maxCapacity) {
+            throw new ValidationException("Exceeds maximum capacity.");
+        }
+        this.currentCapacity += numberOfTickets;
+    }
 }

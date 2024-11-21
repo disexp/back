@@ -158,4 +158,17 @@ public class PromotionServiceImpl implements PromotionService {
         return (showtimeDate.isEqual(promotionStart) || showtimeDate.isAfter(promotionStart) &&
                 (showtimeDate.isEqual(promotionEnd) || showtimeDate.isBefore(promotionEnd)));
     }
+
+    public boolean hasSinglePromotion(Showtime showtime) {
+        if (showtime.getPromotion() != null) {
+            throw new ValidationException("A showtime can have only one promotion.");
+        }
+        return true;
+    }
+
+    public void checkCapacity(Showtime showtime, int numberOfTickets) {
+        if (showtime.getCurrentCapacity() + numberOfTickets > showtime.getMaxCapacity()) {
+            throw new ValidationException("Exceeds maximum capacity.");
+        }
+    }
 }

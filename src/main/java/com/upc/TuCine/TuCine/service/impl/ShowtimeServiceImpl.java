@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,6 +67,9 @@ public class ShowtimeServiceImpl implements ShowtimeService {
     @Override
     public ShowtimeDto createShowtime(ShowtimeDto showtimeDto) {
 
+        existsByDateAndTime(showtimeDto.getDate(), showtimeDto.getTime());
+
+
         Film film = filmRepository.findById(showtimeDto.getFilm().getId()).orElse(null);
         showtimeDto.setFilm(film);
 
@@ -115,6 +120,8 @@ public class ShowtimeServiceImpl implements ShowtimeService {
         showtimeToUpdate.setFilm(showtimeDto.getFilm());
         showtimeToUpdate.setBusiness(showtimeDto.getBusiness());
         showtimeToUpdate.setPromotion(showtimeDto.getPromotion());
+        showtimeToUpdate.setMaxCapacity(showtimeDto.getMaxCapacity());
+        showtimeToUpdate.setCurrentCapacity(showtimeDto.getCurrentCapacity());
 
         // Guardar el Showtime actualizado en el repositorio
         Showtime updatedShowtime = showtimeRepository.save(showtimeToUpdate);
@@ -163,9 +170,21 @@ public class ShowtimeServiceImpl implements ShowtimeService {
         }
     }
 
+    private void existsByDateAndTime(LocalDate date, LocalTime time) {
+        if (showtimeRepository.findByDateAndTime(date, time).isPresent()) {
+            throw new ValidationException("Ya existe una función en esa fecha y hora");
+        }
+    }
+
     private void existsPromotionById(Integer id) {
         if (!promotionRepository.existsById(id)) {
             throw new ValidationException("La promoción no existe");
+        }
+    }
+
+    public void checkCapacity(Showtime showtime, int numberOfTickets) {
+        if (showtime.getCurrentCapacity() + numberOfTickets > showtime.getMaxCapacity()) {
+            throw new ValidationException("Exceeds maximum capacity.");
         }
     }
 

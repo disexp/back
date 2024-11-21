@@ -3,6 +3,8 @@ package com.upc.TuCine.TuCine.service;
 import com.upc.TuCine.TuCine.dto.ShowtimeDto;
 import com.upc.TuCine.TuCine.model.Showtime;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface ShowtimeService {
@@ -17,5 +19,6 @@ public interface ShowtimeService {
 
     ShowtimeDto deleteShowtime(Integer id);
 
+    //ShowtimeDto getShowtimeByDateAndTime(LocalDate date, LocalTime time);
 
 }
