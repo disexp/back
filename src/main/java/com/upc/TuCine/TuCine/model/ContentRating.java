@@ -22,4 +22,11 @@ public class ContentRating {
     private String name;
     @Column(name = "description", length = 100, nullable = false)
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
+
+    @Column(name = "rating", length = 100, nullable = false)
+    private String rating;
 }

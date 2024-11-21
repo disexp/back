@@ -34,4 +34,7 @@ public class Ticket {
     @JoinColumn(name = "Showtime_id", nullable = false, foreignKey = @ForeignKey(name = "FK_TICKET_SHOWTIME"))
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Showtime showtime;
+
+    @Column(name = "status", nullable = false)
+    private String status;
 }
